@@ -1,0 +1,149 @@
+<html>
+<head>
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.8.0.js"></script>
+  <style type=text/css>
+  /* the style sheet dictates what our elements (buttons, backgrounds etc.) will look like. */
+  * {
+    padding: 0;
+    margin: 0;
+  }
+  
+  #interact-button {
+    background-color: grey;
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  .screen {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  #one {
+    background-color: red;
+  }
+
+  #two {
+    background-color: green;
+  }
+
+  #three {
+    background-color: blue;
+  }
+
+  .up {
+    width: 20vw;
+    height: 30vw;
+
+    left: 40vw;
+    top: calc(50vh - 40vw);
+  }
+
+  .right {
+    width: 30vw;
+    height: 20vw;
+
+    right: 10vw;
+    top: calc((100vh - 20vw) / 2);
+  } 
+
+  .down {
+    width: 20vw;
+    height: 30vw;
+
+    left: 40vw;
+    top: calc(50vh + 10vw);
+  }
+
+  .left {
+    width: 30vw;
+    height: 20vw;
+
+    left: 10vw;
+    top: calc((100vh - 20vw) / 2);
+  } 
+  </style>
+
+  <script type="text/javascript">
+
+    var airconsole;
+
+    function App() {
+
+    /* JavaScript / Functionality. Add functions and evens here */
+
+      this.airconsole = new AirConsole({"orientation": "portrait"})
+
+      /*
+       * Here we are adding support for mouse events manually.
+       * --> WE STRONGLY ENCOURAGE YOU TO USE THE AIRCONSOLE CONTROLS LIBRARY
+       * WHICH IS EVEN BETTER (BUT WE DONT WANT TO BLOAT THE CODE HERE).
+       * https://github.com/AirConsole/airconsole-controls/
+       *
+       * DO NOT USE ONCLICK HANDLERS.
+       * THEY ADD A 200MS DELAY!
+       */
+
+      if (!("ontouchstart" in document.createElement("div"))) {
+        var elements = document.getElementsByTagName("*");
+        for (var i = 0; i < elements.length; ++i) {
+          var element = elements[i];
+          var ontouchstart = element.getAttribute("ontouchstart");
+          if (ontouchstart) {
+            element.setAttribute("onmousedown", ontouchstart);
+          }
+          var ontouchend = element.getAttribute("ontouchend");
+          if (ontouchend) {
+            element.setAttribute("onmouseup", ontouchend);
+          }
+        }
+      }
+    }
+
+    /*airconsole.onMessage = function(from, data) {
+      console.log("Received message from device ", from, ": ", data);
+      changeScreen(data);
+    }*/
+
+    
+
+    App.prototype.changeScreen = function(num) {
+      document.getElementById("one").hidden = true;
+      document.getElementById("two").hidden = true;
+      document.getElementById("three").hidden = true;
+
+      document.getElementById(num).hidden = false;
+    }
+
+    App.prototype.sendMessageToScreen = function(msg) {
+      console.log("button press");
+      this.airconsole.message(AirConsole.SCREEN, {"action": msg});
+    }
+  </script>
+</head>
+<body onload="window.app = new App()">
+  <!-- Add your HTML elements here -->
+  <div class="screen" id="one">
+    <div id="interact-button" class="up"    ontouchstart="window.app.sendMessageToScreen('up')"   ></div>
+    <div id="interact-button" class="right" ontouchstart="window.app.sendMessageToScreen('right')"></div>
+    <div id="interact-button" class="down"  ontouchstart="window.app.sendMessageToScreen('down')" ></div>
+    <div id="interact-button" class="left"  ontouchstart="window.app.sendMessageToScreen('left')" ></div>
+  </div>
+
+  <div class="screen" id="two">
+    <div id="interact-button" class="up"    ontouchstart="window.app.sendMessageToScreen('up')"   ></div>
+    <div id="interact-button" class="right" ontouchstart="window.app.sendMessageToScreen('right')"></div>
+    <div id="interact-button" class="down"  ontouchstart="window.app.sendMessageToScreen('down')" ></div>
+    <div id="interact-button" class="left"  ontouchstart="window.app.sendMessageToScreen('left')" ></div>
+  </div>
+
+<div class="screen" id="three">
+    <div id="interact-button" class="up"    ontouchstart="window.app.sendMessageToScreen('up')"   ></div>
+    <div id="interact-button" class="right" ontouchstart="window.app.sendMessageToScreen('right')"></div>
+    <div id="interact-button" class="down"  ontouchstart="window.app.sendMessageToScreen('down')" ></div>
+    <div id="interact-button" class="left"  ontouchstart="window.app.sendMessageToScreen('left')" ></div>
+  </div>
+</body>
+</html>
