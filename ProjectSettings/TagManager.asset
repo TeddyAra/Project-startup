@@ -4,8 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Death
   - Win
+  - Death
+  - Fall
   layers:
   - Default
   - TransparentFX
