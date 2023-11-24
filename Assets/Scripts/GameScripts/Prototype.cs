@@ -1,3 +1,5 @@
+using NDream.AirConsole;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,8 +16,11 @@ public class Prototype : MonoBehaviour {
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private LayerMask defaultMask;
-    [SerializeField] private GameObject canvas;
-    [SerializeField] private TMP_Text text;
+    [SerializeField] private GameObject canvas1;
+    [SerializeField] private TMP_Text text1;
+    [SerializeField] private GameObject canvas2;
+    [SerializeField] private TMP_Text text2_1;
+    [SerializeField] private GameObject text2_2;
 
     // Settings
     [Header("Settings")]
@@ -37,8 +42,63 @@ public class Prototype : MonoBehaviour {
     private Vector3 move;
     private Vector3 fallPosition;
     private Vector3 fallVelocity;
+    private bool gameStarted;
+    private int numberOfPlayers;
+    private int checkPlayerPause;
+
+    void Awake() {
+        AirConsole.instance.onMessage += OnMessage;
+    }
+
+    void OnMessage(int id, JToken data) {
+        Debug.Log(id + " sent " + data);
+    }
+
+    void SendMessage(int id, JToken data) {
+        AirConsole.instance.Message(id, data);
+    }
+
+    void SendBroadcast(string msg) {
+        string data = msg;
+
+        foreach (int id in AirConsole.instance.GetControllerDeviceIds()) {
+            Debug.Log("Sending " + data + " to " + id);
+            AirConsole.instance.Message(id, data);
+        }
+    }
 
     void Update() {
+        // Starts the game
+        if (!gameStarted) {
+            checkPlayerPause += 1;
+            if (AirConsole.instance.IsAirConsoleUnityPluginReady() && checkPlayerPause > 30) {
+                checkPlayerPause = 0;
+                numberOfPlayers = AirConsole.instance.GetControllerDeviceIds().Count;
+                text2_1.text = "Players: " + numberOfPlayers + "/3";
+
+                if (numberOfPlayers == 3) { 
+                    text2_2.SetActive(true);
+                }
+            }
+
+            if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.E)) {
+                if (numberOfPlayers == 3) {
+                    gameStarted = true;
+                    canvas2.SetActive(false);
+
+                    List<string> screens = new List<string> {
+                        "one", "two", "three"
+                    };
+                    foreach (int id in AirConsole.instance.GetControllerDeviceIds()) {
+                        int index = UnityEngine.Random.Range(0, screens.Count);
+                        SendMessage(id, screens[index]);
+                        screens.RemoveAt(index);
+                    }
+                }
+            }
+            return;
+        }
+
         // Calculates gravity and jump force
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
@@ -84,18 +144,24 @@ public class Prototype : MonoBehaviour {
                 hit.transform.gameObject.AddComponent<Rigidbody>();
                 hit.transform.gameObject.layer = defaultMask;
                 isDead = true;
-            } 
+            }
         }
     }
 
     // Checks if player should die or win
     void OnTriggerEnter(Collider other) {
         if (other.CompareTag(deathTag)) {
-            canvas.SetActive(true);
+            canvas1.SetActive(true);
         } else if (other.CompareTag(winTag)) {
             hasWon = true;
-            text.SetText("You won!");
-            canvas.SetActive(true);
+            text1.SetText("You won!");
+            canvas1.SetActive(true);
+        }
+    }
+
+    void OnDestroy() {
+        if (AirConsole.instance != null) {
+            AirConsole.instance.onMessage -= OnMessage;
         }
     }
 }
