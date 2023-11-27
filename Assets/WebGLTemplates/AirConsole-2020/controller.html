@@ -1,0 +1,127 @@
+<html>
+<head>
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.8.0.js"></script>
+  <style type=text/css>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+  * {
+    padding: 0;
+    margin: 0;
+
+    background-color: rgb(50, 50, 50);
+    color: rgb(240, 240, 240);
+
+    font-family: 'Poppins';
+  }
+
+  .screen {
+    width: 100vw;
+    height: 100vh;
+  }
+
+  #start #image {
+    position: absolute;
+
+    width: 60vw;
+    height: 40vw;
+    left: 20vw;
+    top: 10vw;
+
+    background-image: url("Images/placeholder.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  #start #username {
+    position: absolute;
+    padding-left: 5vw;
+
+    width: 60vw;
+    height: 10vw;
+    left: 20vw;
+    top: calc(50vh - 15vw);
+
+    background-color: rgb(70, 70, 70);
+    border-radius: 2vw;
+    border: 2px solid rgb(100, 100, 100);
+  }
+
+  #start #play {
+    position: absolute;
+    
+    width: 40vw;
+    height: 10vw;
+    left: 30vw;
+    bottom: calc(50vh - 15vw);
+
+    background-color: rgb(17, 172, 42);
+    border-radius: 2vw;
+    border: 2px solid rgb(49, 206, 75);
+
+    line-height: 10vw;
+    text-align: center;
+  }
+  </style>
+
+  <script type="text/javascript">
+    var airconsole;
+
+    function App() {
+      /* Hides all screens */
+      const collection = document.getElementsByClassName("screen");
+      for (let i = 0; i < collection.length; i++) {
+        collection[i].style.display = 'none';
+      }
+
+      /* Shows starting screen */
+      document.getElementById("start").style.display = 'block';
+
+      /* AirConsole things */
+      this.airconsole = new AirConsole({"orientation": "portrait"});
+
+      if (!("ontouchstart" in document.createElement("div"))) {
+        var elements = document.getElementsByTagName("*");
+        for (var i = 0; i < elements.length; ++i) {
+          var element = elements[i];
+          var ontouchstart = element.getAttribute("ontouchstart");
+          if (ontouchstart) {
+            element.setAttribute("onmousedown", ontouchstart);
+          }
+          var ontouchend = element.getAttribute("ontouchend");
+          if (ontouchend) {
+            element.setAttribute("onmouseup", ontouchend);
+          }
+        }
+      }
+    }
+
+    /* When device receives a message */
+    AirConsole.prototype.onMessage = function(device_id, data) {
+      console.log(data);
+    }
+
+    /* Sends a message to the host */
+    App.prototype.sendMessageToScreen = function(type, msg) {
+      if (msg == 'play') {
+        var name = document.getElementById('username').value;
+        this.airconsole.message(AirConsole.SCREEN, {'join': name});
+        console.log("name (" + name + ") sent");
+        return;
+      }
+
+      console.log("button press");
+      this.airconsole.message(AirConsole.SCREEN, {type: msg});
+    }
+  </script>
+</head>
+<body onload="window.app = new App()">
+  <!-- ontouchstart="window.app.sendMessageToScreen('button', 'works')" -->
+
+  <div class="screen" id="start">
+    <div id="image"></div>
+    <input id="username" type="text" autocapitalize="off" autocomplete="off" placeholder="ENTER YOUR NAME" maxlength="18">
+    <div id="play" ontouchstart="window.app.sendMessageToScreen('button', 'play')">PLAY</div>
+  </div>
+</body>
+</html>
