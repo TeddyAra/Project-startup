@@ -6,22 +6,17 @@ using Newtonsoft.Json.Linq;
 using System;
 
 public class GameLogic : MonoBehaviour {
-    struct Player {
-        public int id;
-        public Vector2 position;
-        public Transform visual;
+    [SerializeField] int maxPlayers = 8;
 
-        public Player(int id, int x, int y, Transform visual) {
+    struct Player {
+        public string name; // Name displayed on host screen
+        public int id; // Device id
+
+        public Player(string name, int id) {
+            this.name = name;
             this.id = id;
-            position = new Vector2(x, y);
-            this.visual = visual;
         }
     }
-
-    [SerializeField] int speed;
-    [SerializeField] GameObject playerPrefab;
-    [SerializeField] AirConsole airConsole;
-    [SerializeField] UnityEngine.Object newSite;
 
     List<Player> players = new List<Player>();
 
@@ -29,57 +24,66 @@ public class GameLogic : MonoBehaviour {
         AirConsole.instance.onMessage += OnMessage;
     }
 
+    // Receives messages
     void OnMessage(int fromDeviceID, JToken data) {
-        // Checks if player exists
-        bool doesPlayerExist = false;
-        Player currentPlayer = new Player();
+        Debug.Log("Message received from " + fromDeviceID);
 
-        foreach (Player player in players) {
-            if (fromDeviceID == player.id) {
-                doesPlayerExist = true;
-                currentPlayer = player;
-                break;
+        // A player wants to join the game
+        if (data["join"] != null) {
+            Debug.Log("Player wants to join!");
+
+            // There are too many players
+            if (players.Count >= maxPlayers) {
+                SendMessage(fromDeviceID, "max");
+                Debug.Log("Too many players");
+                return;
             }
-        }
 
-        // Creates a player if one doesn't exist
-        if (!doesPlayerExist) {
-            GameObject player = Instantiate(playerPrefab);
-            currentPlayer = new Player(fromDeviceID, 0, 0, player.transform);
-            players.Add(currentPlayer);
-        }
+            // There is already someone with that name
+            foreach (Player player in players) {
+                if (data["join"].ToString().Equals(player.name)) {
+                    SendMessage(fromDeviceID, "name");
+                    Debug.Log("Already someone with that name");
+                    return;
+                }
+            }
 
-        // Reads the input
-        Vector2 prevPos = new Vector2(currentPlayer.visual.position.x, currentPlayer.visual.position.y);
-
-        Debug.Log("message from " + fromDeviceID + ", data: " + data);
-        if (data["action"] != null) {
-            if (data["action"].ToString().Equals("up"))
-                currentPlayer.visual.Translate(0, 0, speed);
-            if (data["action"].ToString().Equals("right"))
-                currentPlayer.visual.Translate(speed, 0, 0);
-            if (data["action"].ToString().Equals("down"))
-                currentPlayer.visual.Translate(0, 0, -speed);
-            if (data["action"].ToString().Equals("left"))
-                currentPlayer.visual.Translate(-speed, 0, 0);
-        }
-
-        // Checks position
-        if (currentPlayer.visual.position.x < -2 && prevPos.x >= -2) {
-            airConsole.Message(fromDeviceID, "1");
-        }
-
-        if (currentPlayer.visual.position.x >= -2 &&
-            currentPlayer.visual.position.x <= 2 &&
-            (prevPos.x < -2 || prevPos.x > 2)) {
-            airConsole.Message(fromDeviceID, "2");
-        }
-
-        if (currentPlayer.visual.position.x > 2 && prevPos.x <= 2)
-        {
-            airConsole.Message(fromDeviceID, "1");
+            // Player can join the game
+            SendMessage(fromDeviceID, "joined");
+            AddPlayer(data["join"].ToString(), fromDeviceID);
+            return;
         }
     }
+
+    void AddPlayer(string name, int id) {
+        Player newPlayer = new Player(name, id);
+        players.Add(newPlayer);
+
+        Debug.Log(newPlayer.name + " joined!");
+    }
+
+    // Sends a message to one device
+    void SendMessage(int id, JToken data) {
+        AirConsole.instance.Message(id, data);
+    }
+
+    // Sends a message to a range of devices
+    void SendBroadcast(string msg, bool exclusive = false) {
+        // Only sends broadcast to devices currently playing
+        if (exclusive) {
+            foreach (Player player in players) {
+                Debug.Log("Sending " + msg + " to " + player.id);
+                AirConsole.instance.Message(player.id, msg);
+            }
+        // Sends broadcast to all connected devices
+        } else {
+            foreach (int id in AirConsole.instance.GetControllerDeviceIds()) {
+                Debug.Log("Sending " + msg + " to " + id);
+                AirConsole.instance.Message(id, msg);
+            }
+        }
+    }
+
 
     void OnDestroy() {
         if (AirConsole.instance != null) {

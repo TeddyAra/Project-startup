@@ -3,10 +3,16 @@
   <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
   <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.8.0.js"></script>
   <style type=text/css>
-  /* the style sheet dictates what our elements (buttons, backgrounds etc.) will look like. */
+  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
   * {
     padding: 0;
     margin: 0;
+
+    background-color: rgb(50, 50, 50);
+    color: rgb(240, 240, 240);
+
+    font-family: 'Poppins';
   }
 
   .screen {
@@ -14,41 +20,47 @@
     height: 100vh;
   }
 
-  #image {
+  #start #image {
     position: absolute;
+
+    width: 60vw;
+    height: 40vw;
+    left: 20vw;
+    top: 10vw;
+
+    background-image: url("Images/placeholder.png");
     background-size: contain;
     background-repeat: no-repeat;
-
-    width: 80vw;
-    height: 80vw;
-
-    left: 10vw;
-    top: calc((100vh - 80vw) / 2);
-  }
-  
-  #one #image {
-    background-image: url("Images/pic1.png");
   }
 
-  #two #image {
-    background-image: url("Images/pic2.png");
+  #start #username {
+    position: absolute;
+    padding-left: 5vw;
+
+    width: 60vw;
+    height: 10vw;
+    left: 20vw;
+    top: calc(50vh - 15vw);
+
+    background-color: rgb(70, 70, 70);
+    border-radius: 2vw;
+    border: 2px solid rgb(100, 100, 100);
   }
 
-  #three #image {
-    background-image: url("Images/pic3.png");
-  }
+  #start #play {
+    position: absolute;
+    
+    width: 40vw;
+    height: 10vw;
+    left: 30vw;
+    bottom: calc(50vh - 15vw);
 
-  #four {
+    background-color: rgb(17, 172, 42);
+    border-radius: 2vw;
+    border: 2px solid rgb(49, 206, 75);
+
+    line-height: 10vw;
     text-align: center;
-    color: white;
-  }
-
-  #four h1 {
-    padding-top: 40vh;
-  }
-
-  #four p {
-    padding-top: 5vh;
   }
   </style>
 
@@ -56,12 +68,16 @@
     var airconsole;
 
     function App() {
+      /* Hides all screens */
+      const collection = document.getElementsByClassName("screen");
+      for (let i = 0; i < collection.length; i++) {
+        collection[i].style.display = 'none';
+      }
 
-      /* JavaScript / Functionality. Add functions and evens here */
-      document.getElementById("one").style.display = 'none';
-      document.getElementById("two").style.display = 'none';
-      document.getElementById("three").style.display = 'none';
+      /* Shows starting screen */
+      document.getElementById("start").style.display = 'block';
 
+      /* AirConsole things */
       this.airconsole = new AirConsole({"orientation": "portrait"});
 
       if (!("ontouchstart" in document.createElement("div"))) {
@@ -80,38 +96,32 @@
       }
     }
 
+    /* When device receives a message */
     AirConsole.prototype.onMessage = function(device_id, data) {
-      document.getElementById("four").style.display = 'none';
-
       console.log(data);
-      document.getElementById(data).style.display = 'block';
     }
 
-    App.prototype.sendMessageToScreen = function(msg) {
+    /* Sends a message to the host */
+    App.prototype.sendMessageToScreen = function(type, msg) {
+      if (msg == 'play') {
+        var name = document.getElementById('username').value;
+        this.airconsole.message(AirConsole.SCREEN, {'join': name});
+        console.log("name (" + name + ") sent");
+        return;
+      }
+
       console.log("button press");
-      this.airconsole.message(AirConsole.SCREEN, {"action": msg});
+      this.airconsole.message(AirConsole.SCREEN, {type: msg});
     }
   </script>
 </head>
 <body onload="window.app = new App()">
-  <!-- Add your HTML elements here -->
-  <!-- ontouchstart="window.app.sendMessageToScreen('works')" -->
+  <!-- ontouchstart="window.app.sendMessageToScreen('button', 'works')" -->
 
-  <div class="screen" id="one">
+  <div class="screen" id="start">
     <div id="image"></div>
-  </div>
-
-  <div class="screen" id="two">
-    <div id="image"></div>
-  </div>
-
-  <div class="screen" id="three">
-    <div id="image"></div>
-  </div>
-
-  <div class="screen" id="four">
-    <h1>Connected!</h1>
-    <p>Please wait for the host to start the game...</p>
+    <input id="username" type="text" autocapitalize="off" autocomplete="off" placeholder="ENTER YOUR NAME" maxlength="18">
+    <div id="play" ontouchstart="window.app.sendMessageToScreen('button', 'play')">PLAY</div>
   </div>
 </body>
 </html>
