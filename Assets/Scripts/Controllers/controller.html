@@ -20,7 +20,7 @@
     height: 100vh;
   }
 
-  #start #image {
+  .image {
     position: absolute;
 
     width: 60vw;
@@ -33,7 +33,7 @@
     background-repeat: no-repeat;
   }
 
-  #start #username {
+  #username {
     position: absolute;
     padding-left: 5vw;
 
@@ -43,11 +43,11 @@
     top: calc(50vh - 15vw);
 
     background-color: rgb(70, 70, 70);
-    border-radius: 2vw;
     border: 2px solid rgb(100, 100, 100);
+    border-radius: 2vw;
   }
 
-  #start #play {
+  #play {
     position: absolute;
     
     width: 40vw;
@@ -56,26 +56,64 @@
     bottom: calc(50vh - 15vw);
 
     background-color: rgb(17, 172, 42);
-    border-radius: 2vw;
     border: 2px solid rgb(49, 206, 75);
+    border-radius: 2vw;
 
     line-height: 10vw;
     text-align: center;
+  }
+
+  .message {
+    position: absolute;
+    
+    width: 80vw;
+    height: 10vw;
+    left: 10vw;
+    bottom: calc(50vh - 35vw);
+
+    background-color: rgb(172, 17, 17);
+    border: 2px solid rgb(206, 49, 49);
+    border-radius: 2vw;
+
+    line-height: 10vw;
+    text-align: center;
+  }
+
+  #join-screen .text {
+    position: absolute;
+
+    width: 80vw;
+    height: 10vw;
+    left: 10vw;
+    top: calc(50vh - 15vw);
+
+    line-height: 10vw;
+    text-align: center;
+
+    background-color: rgb(17, 172, 42);
+    border: 2px solid rgb(49, 206, 75);
+    border-radius: 2vw;
   }
   </style>
 
   <script type="text/javascript">
     var airconsole;
+    var currentScreen = 'start-screen';
 
     function App() {
+      /* Gets the first screen ready */
+      /* Hides all messages */
+      hideMessages();
+      
       /* Hides all screens */
-      const collection = document.getElementsByClassName("screen");
-      for (let i = 0; i < collection.length; i++) {
+      var collection = document.getElementsByClassName('screen');
+
+      for (var i = 0; i < collection.length; i++) {
         collection[i].style.display = 'none';
       }
 
-      /* Shows starting screen */
-      document.getElementById("start").style.display = 'block';
+      /* Shows first screen */
+      document.getElementById(currentScreen).style.display = 'block';
 
       /* AirConsole things */
       this.airconsole = new AirConsole({"orientation": "portrait"});
@@ -96,8 +134,46 @@
       }
     }
 
+    /* Changes screen */
+    function changeScreen(screen) {
+      /* Hides old screen */
+      document.getElementById(currentScreen).style.display = 'none';
+
+      /* Shows new screen */
+      document.getElementById(screen).style.display = 'block';
+      currentScreen = screen;
+      console.log(currentScreen + " activated");
+    }
+
+    /* Shows message */
+    function showMessage(message) {
+      document.getElementById(message).style.display = 'block';
+      console.log(message + " shown");
+    }
+
+    /* Hides all messages */
+    function hideMessages() {
+      var collection = document.getElementsByClassName('message');
+
+      for (var i = 0; i < collection.length; i++) {
+        collection[i].style.display = 'none';
+      }
+
+      console.log("messages hidden");
+    }
+
     /* When device receives a message */
     AirConsole.prototype.onMessage = function(device_id, data) {
+      /* Host wants to change screen */
+      if (data['type'] == 'change' && data['screen'] != null) {
+        changeScreen(data['screen']);
+      }
+
+      /* Host wants to show a message */
+      if (data['type'] == 'message' && data['message'] != null) {
+        showMessage(data['message']);
+      }
+
       console.log(data);
     }
 
@@ -118,10 +194,30 @@
 <body onload="window.app = new App()">
   <!-- ontouchstart="window.app.sendMessageToScreen('button', 'works')" -->
 
-  <div class="screen" id="start">
-    <div id="image"></div>
+  <!-- Screen you see at the start of the game -->
+  <div class="screen" id="start-screen">
+    <!-- Placeholder image -->
+    <div class="image"></div>
+
+    <!-- Username input -->
     <input id="username" type="text" autocapitalize="off" autocomplete="off" placeholder="ENTER YOUR NAME" maxlength="18">
+
+    <!-- Play button -->
     <div id="play" ontouchstart="window.app.sendMessageToScreen('button', 'play')">PLAY</div>
+
+    <!-- Messages -->
+    <div class="message" id="too-many" >Too many players!           </div>
+    <div class="message" id="taken"    >That name is already taken! </div>
+    <div class="message" id="not-valid">Please use a valid username!</div>
+  </div>
+
+  <!-- Screen you see when you've joined -->
+  <div class="screen" id="join-screen">
+    <!-- Placeholder image -->
+    <div class="image"></div>
+
+    <!-- Text -->
+    <div class="text">You joined!</div>
   </div>
 </body>
 </html>
