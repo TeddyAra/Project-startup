@@ -34,8 +34,10 @@ public class GameLogic : MonoBehaviour {
 
     // Receives messages
     void OnMessage(int fromDeviceID, JToken data) {
-        JToken message;
         Debug.Log("Message received from " + fromDeviceID);
+
+        // Creates a new JToken message to send back to the device
+        JToken message;
 
         // A player wants to join the game
         if (data["join"] != null) {
@@ -69,9 +71,6 @@ public class GameLogic : MonoBehaviour {
 
             // Player can join the game
             message = JToken.Parse(@"{'type':'change','screen':'join-screen'}");
-            SendMessage(fromDeviceID, message);
-
-            message = JToken.Parse(@"{'type':'message','screen':'joined'}");
             SendMessage(fromDeviceID, message);
 
             AddPlayer(data["join"].ToString(), fromDeviceID);

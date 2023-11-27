@@ -1,9 +1,9 @@
 <html>
 <head>
   <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-  <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.8.0.js"></script>
+  <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-1.8.0.js"></script>'
   <style type=text/css>
-  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+  /* @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
   * {
     padding: 0;
@@ -93,7 +93,145 @@
     background-color: rgb(17, 172, 42);
     border: 2px solid rgb(49, 206, 75);
     border-radius: 2vw;
+  } */
+
+  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@font-face {
+    font-family: vanillaExtract;
+    src: url(/fonts/vanilla-extract.regular.ttf);
+}
+
+@font-face {
+    font-family: sabandija;
+    src: url(/fonts/Sabandija-font-ffp.otf);
+}
+
+:root{
+    --lightgreen: #A0C334; 
+    --darkgreen: #6CB03F;
+    --darkergreen: #406B1B; 
+    --beige: #F9F4D7;
+    --grey: #B6BFC0; 
+    --orange: #F5941C; 
+    --purple: #8B5694; 
+    --red: #EA3848; 
+    --palered: #C96267; 
+    --white: #F3F3F3; 
+    --darkgrey: #D9D9D9; 
+}
+
+  
+* {
+  padding: 0;
+  margin: 0;
+  color: rgb(240, 240, 240);
+
+    font-family: 'vanillaExtract';
   }
+
+  .screen {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--white);
+  }
+
+
+  #start #username {
+    margin-top: 1rem; 
+    margin-left: 1rem; 
+    width: 80%;
+    height: 2rem;
+
+    background-color: var(--darkgrey);
+    border: none; 
+    border-radius: 2vw;
+    padding-left: 10px;
+  }
+#start #play {
+    width: 10rem;
+    height: 2rem;
+    margin: 0 auto; 
+    margin-top: 2rem;
+
+    background-color: var(--darkgreen);
+    border-radius: 5rem;
+
+    line-height: 2rem;
+    text-align: center;
+  }
+
+  * {
+    padding: 0;
+    margin: 0;}
+  
+    .screen {
+      width: 100vw;
+      height: 100vh;
+    }
+  
+    #image {
+      position: absolute;
+      background-size: contain;
+      background-repeat: no-repeat;
+  
+      width: 80vw;
+      height: 80vw;
+  
+      left: 10vw;
+      top: calc((100vh - 80vw) / 2);
+    }
+  
+    #one #image {
+      background-image: url("Images/pic1.png");
+    }
+  
+    #two #image {
+      background-image: url("Images/pic2.png");
+    }
+  
+    #three #image {
+      background-image: url("Images/pic3.png");
+    }
+  
+    #four {
+      text-align: center;
+      color: white;
+    }
+  
+    #four h1 {
+      padding-top: 40vh;
+    }
+  
+    #four p {
+      padding-top: 5vh;
+    }
+  
+    .navbar{
+      background-color: var(--darkergreen); 
+      width: 100%; 
+      height: 50px; 
+    }
+  
+    .navbar h1{
+      background: none;
+      font-family: 'sabandija';
+      font-size: 1.6rem; 
+      font-weight: 100; 
+      text-align: center;
+      padding: 0.6rem 0; 
+    }
+  
+    #choose-name{
+      background: none; 
+      color: var(--darkgreen)
+    }
+  
+    .startmenu{
+      width: 90%; 
+      height: 85%; 
+      margin: 0 auto; 
+      margin-top: 2rem; 
+    }
   </style>
 
   <script type="text/javascript">
@@ -102,14 +240,17 @@
 
     function App() {
       /* Gets the first screen ready */
+      /* Hides all messages */
       hideMessages();
       
+      /* Hides all screens */
       var collection = document.getElementsByClassName('screen');
 
       for (var i = 0; i < collection.length; i++) {
         collection[i].style.display = 'none';
       }
 
+      /* Shows first screen */
       document.getElementById(currentScreen).style.display = 'block';
 
       /* AirConsole things */
