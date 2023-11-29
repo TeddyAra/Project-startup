@@ -3,24 +3,23 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Prototype : MonoBehaviour {
     // References
     [Header("References")]
     [SerializeField] Transform cam;
+    [SerializeField] Transform fireballPoint;
     [SerializeField] private CharacterController controller;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private LayerMask defaultMask;
-    [SerializeField] private GameObject canvas1;
-    [SerializeField] private TMP_Text text1;
-    [SerializeField] private GameObject canvas2;
-    [SerializeField] private TMP_Text text2_1;
-    [SerializeField] private GameObject text2_2;
+    [SerializeField] private GameObject fireball;
 
     // Settings
     [Header("Settings")]
@@ -29,22 +28,24 @@ public class Prototype : MonoBehaviour {
     [SerializeField] private float groundDistance = 0.4f;
     [SerializeField] private float jumpHeight = 1f;
     [SerializeField] private float distanceCheck = 0.1f;
+    [SerializeField] private int clickNumToShoot = 10;
     [SerializeField] private string fallTileTag = "Fall";
     [SerializeField] private string winTag = "Win";
     [SerializeField] private string deathTag = "Death";
+    [SerializeField] private string wallTag = "Wall";
+    [SerializeField] private string tileTag = "Tiles";
+    [SerializeField] private float fireballLifeTime = 5;
     [SerializeField] private bool camIgnoreX = true;
 
     // Variables
     private Vector3 velocity;
     private bool isGrounded;
     private bool isDead;
-    private bool hasWon;
     private Vector3 move;
     private Vector3 fallPosition;
     private Vector3 fallVelocity;
-    private bool gameStarted;
-    private int numberOfPlayers;
-    private int checkPlayerPause;
+    private Dictionary<int, int> spamClicks;
+    [HideInInspector] public Dictionary<GameObject, float> fireballs;
 
     void Awake() {
         AirConsole.instance.onMessage += OnMessage;
@@ -52,51 +53,77 @@ public class Prototype : MonoBehaviour {
 
     void OnMessage(int id, JToken data) {
         Debug.Log(id + " sent " + data);
+
+        // If a button has been pressed
+        if (data["button"] != null) {
+            // If the spam button has been pressed
+            if (data["button"].ToString().Equals("spam")) {
+                Debug.Log("Spam clicked");
+                spamClicks[id]++;
+                if (spamClicks[id] >= clickNumToShoot) {
+                    spamClicks[id] = 0;
+                    Debug.Log("Fireball!");
+                    
+                    GameObject newFireball = Instantiate(fireball, fireballPoint.position + Vector3.right * UnityEngine.Random.Range(-3f, 3f), Quaternion.identity);
+                    newFireball.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 20);
+                    fireballs.Add(newFireball, 0);
+                }
+            }
+        }
     }
 
     void SendMessage(int id, JToken data) {
         AirConsole.instance.Message(id, data);
     }
 
-    void SendBroadcast(string msg) {
-        string data = msg;
+    // Sends a message to a range of devices
+    void SendBroadcast(JToken msg, bool exclusive = false) {
+        // Only sends broadcast to devices currently playing
+        if (exclusive) {
+            foreach (Player player in GameLogic.players) {
+                Debug.Log("Sending " + msg + " to " + player.id);
+                AirConsole.instance.Message(player.id, msg);
+            }
+            // Sends broadcast to all connected devices
+        } else {
+            foreach (int id in AirConsole.instance.GetControllerDeviceIds()) {
+                Debug.Log("Sending " + msg + " to " + id);
+                AirConsole.instance.Message(id, msg);
+            }
+        }
+    }
 
-        foreach (int id in AirConsole.instance.GetControllerDeviceIds()) {
-            Debug.Log("Sending " + data + " to " + id);
-            AirConsole.instance.Message(id, data);
+    void Start() {
+        // Creates dictionaries for wall break game
+        spamClicks = new Dictionary<int, int>();
+        fireballs = new Dictionary<GameObject, float>();
+
+        // Adds each player to the dictionary
+        foreach (Player player in GameLogic.players) {
+            spamClicks.Add(player.id, 0);
         }
     }
 
     void Update() {
-        // Starts the game
-        if (!gameStarted) {
-            checkPlayerPause += 1;
-            if (AirConsole.instance.IsAirConsoleUnityPluginReady() && checkPlayerPause > 30) {
-                checkPlayerPause = 0;
-                numberOfPlayers = AirConsole.instance.GetControllerDeviceIds().Count;
-                text2_1.text = "Players: " + numberOfPlayers + "/3";
+        // Continues timer for each fireball
+        for (int i = 0; i < fireballs.Count; i++) { 
+            GameObject currentFireball = fireballs.ElementAt(i).Key;
+            fireballs[currentFireball] += Time.deltaTime;
 
-                if (numberOfPlayers == 3) { 
-                    text2_2.SetActive(true);
-                }
+            if (fireballs[currentFireball] > fireballLifeTime) {
+                Destroy(currentFireball);
+                fireballs.Remove(currentFireball);
             }
+        }
 
-            if (Input.GetButtonDown("Fire1") || Input.GetKeyDown(KeyCode.E)) {
-                if (numberOfPlayers == 3) {
-                    gameStarted = true;
-                    canvas2.SetActive(false);
+        // Resets the scene
+        if (Input.GetKeyDown(KeyCode.R)) {
+            JToken message = JToken.Parse(@"{'type':'change','screen':'start-screen'}");
+            SendBroadcast(message, true);
 
-                    List<string> screens = new List<string> {
-                        "one", "two", "three"
-                    };
-                    foreach (int id in AirConsole.instance.GetControllerDeviceIds()) {
-                        int index = UnityEngine.Random.Range(0, screens.Count);
-                        SendMessage(id, screens[index]);
-                        screens.RemoveAt(index);
-                    }
-                }
-            }
-            return;
+            GameLogic.players.Clear();
+            Debug.Log("Number of players: " + GameLogic.players.Count);
+            SceneManager.LoadScene("Game");
         }
 
         // Calculates gravity and jump force
@@ -126,7 +153,7 @@ public class Prototype : MonoBehaviour {
         controller.Move(velocity * Time.deltaTime);
 
         // No input if dead
-        if (isDead || hasWon) return;
+        if (isDead) return;
 
         // Gets input
         float x = Input.GetAxis("Horizontal");
@@ -148,14 +175,53 @@ public class Prototype : MonoBehaviour {
         }
     }
 
-    // Checks if player should die or win
+    // Checks if player should die
     void OnTriggerEnter(Collider other) {
-        if (other.CompareTag(deathTag)) {
-            canvas1.SetActive(true);
-        } else if (other.CompareTag(winTag)) {
-            hasWon = true;
-            text1.SetText("You won!");
-            canvas1.SetActive(true);
+        JToken message;
+
+        // Host died
+        if (other.transform.CompareTag(deathTag)) {
+            message = JToken.Parse(@"{'type':'change','screen':'wait-screen'}");
+            SendBroadcast(message, true);
+            SceneManager.LoadScene("Prototype"); // For prototype, reset the scene. For final version, put a death screen here
+        // Players won minigame
+        } else if (other.transform.CompareTag(winTag)) {
+            message = JToken.Parse(@"{'type':'change','screen':'wait-screen'}");
+            SendBroadcast(message, true);
+            Debug.Log("Minigame won");
+        // Players play wall minigame
+        } else if (other.transform.CompareTag(wallTag)) {
+            message = JToken.Parse(@"{'type':'change','screen':'wall-screen'}");
+            SendBroadcast(message, true);
+            Debug.Log("Minigame wall");
+        // Players play tiles minigame
+        } else if (other.transform.CompareTag(tileTag)) {
+            message = JToken.Parse(@"{'type':'change','screen':'tiles-screen'}");
+            SendBroadcast(message, true);
+            Debug.Log("Minigame tiles");
+
+            // Hide previous messages
+            message = JToken.Parse(@"{'type':'message','screen':'all'}");
+            SendBroadcast(message, true);
+
+            // Changes image for each player
+            // Hardcoded for now, change this for final version!
+            for (int i = 0; i < GameLogic.players.Count; i++) {
+                string msg = "";
+                switch (i) {
+                    case 0:
+                        msg = @"{'type':'message','message':'one'}";
+                        break;
+                    case 1:
+                        msg = @"{'type':'message','message':'two'}";
+                        break;
+                    case 2:
+                        msg = @"{'type':'message','message':'three'}";
+                        break;
+                }
+                message = JToken.Parse(msg);
+                SendMessage(GameLogic.players[i].id, message);
+            }
         }
     }
 
