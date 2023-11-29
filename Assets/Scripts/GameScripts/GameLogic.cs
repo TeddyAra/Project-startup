@@ -19,6 +19,7 @@ public class GameLogic : MonoBehaviour {
 
     [HideInInspector] public static List<Player> players = new List<Player>(); // List of all players who are currently playing
     [HideInInspector] public static string roomCode = ""; // The code to connect with the host
+    private bool codeShown = false;
 
     void Awake() {
         AirConsole.instance.onReady += OnReady; // Gets called when the first device connects
@@ -134,7 +135,7 @@ public class GameLogic : MonoBehaviour {
 
         // Creates a player
         Player newPlayer = existingPlayer;
-        if (existingPlayer == null) {
+        if (newPlayer == null) {
             newPlayer = ScriptableObject.CreateInstance<Player>();
             newPlayer.username = name;
             newPlayer.id = id;
@@ -184,7 +185,7 @@ public class GameLogic : MonoBehaviour {
         // Player wants to start the game
         if (Input.GetButtonDown("Fire1") && players.Count >= minPlayers) {
             // Switches to wait screen
-            JToken message = JToken.Parse(@"{'type':'change','screen':'start-screen'}");
+            JToken message = JToken.Parse(@"{'type':'change','screen':'wait-screen'}");
             SendBroadcast(message, true);
 
             // Change scene
@@ -196,6 +197,8 @@ public class GameLogic : MonoBehaviour {
         // Adds code to UI
         playCode.text = "Code: " + code;
         roomCode = code;
+
+        AirConsole.instance.browserStartMode = StartMode.Normal;
     }
 
     void OnDestroy() {

@@ -121,6 +121,9 @@ public class Prototype : MonoBehaviour {
             JToken message = JToken.Parse(@"{'type':'change','screen':'start-screen'}");
             SendBroadcast(message, true);
 
+            SendBroadcast(message, true);
+            message = JToken.Parse(@"{'type':'message','screen':'all'}");
+
             GameLogic.players.Clear();
             Debug.Log("Number of players: " + GameLogic.players.Count);
             SceneManager.LoadScene("Game");
@@ -182,6 +185,8 @@ public class Prototype : MonoBehaviour {
         // Host died
         if (other.transform.CompareTag(deathTag)) {
             message = JToken.Parse(@"{'type':'change','screen':'wait-screen'}");
+            SendBroadcast(message, true);
+            message = JToken.Parse(@"{'type':'message','screen':'all'}");
             SendBroadcast(message, true);
             SceneManager.LoadScene("Prototype"); // For prototype, reset the scene. For final version, put a death screen here
         // Players won minigame
