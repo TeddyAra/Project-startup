@@ -23,6 +23,7 @@ public class Prototype : MonoBehaviour {
 
     // Settings
     [Header("Settings")]
+    [SerializeField] public bool usingAirConsole = true;
     [SerializeField] private float speed = 12f;
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float groundDistance = 0.4f;
@@ -48,7 +49,7 @@ public class Prototype : MonoBehaviour {
     [HideInInspector] public Dictionary<GameObject, float> fireballs;
 
     void Awake() {
-        AirConsole.instance.onMessage += OnMessage;
+        if (usingAirConsole) AirConsole.instance.onMessage += OnMessage;
     }
 
     void OnMessage(int id, JToken data) {
@@ -73,11 +74,15 @@ public class Prototype : MonoBehaviour {
     }
 
     void SendMessage(int id, JToken data) {
+        if (!usingAirConsole) return;
+
         AirConsole.instance.Message(id, data);
     }
 
     // Sends a message to a range of devices
-    void SendBroadcast(JToken msg, bool exclusive = false) {
+    public void SendBroadcast(JToken msg, bool exclusive = false) {
+        if (!usingAirConsole) return;
+
         // Only sends broadcast to devices currently playing
         if (exclusive) {
             foreach (Player player in GameLogic.players) {
@@ -236,7 +241,7 @@ public class Prototype : MonoBehaviour {
 
     void OnDestroy() {
         if (AirConsole.instance != null) {
-            AirConsole.instance.onMessage -= OnMessage;
+            if (usingAirConsole) AirConsole.instance.onMessage -= OnMessage;
         }
     }
 }

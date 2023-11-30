@@ -1,11 +1,14 @@
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using NDream.AirConsole;
 
 public class WallScript : MonoBehaviour {
     [SerializeField] private int health;
     [SerializeField] private bool playerDependentHealth;
     [SerializeField] private GameObject player;
+    [SerializeField] private Prototype prototypeScript;
 
     void Start() {
         if (playerDependentHealth) {
@@ -20,6 +23,9 @@ public class WallScript : MonoBehaviour {
 
         if (health <= 0) { 
             transform.gameObject.SetActive(false);
+
+            JToken msg = JToken.Parse(@"{'type':'message','screen':'all'}");
+            prototypeScript.SendBroadcast(msg, true);
         }
     }
 }
