@@ -118,14 +118,16 @@ public class Prototype : MonoBehaviour {
 
         // Resets the scene
         if (Input.GetKeyDown(KeyCode.R)) {
+            // Sends players back to start screen
             JToken message = JToken.Parse(@"{'type':'change','screen':'start-screen'}");
             SendBroadcast(message, true);
 
-            SendBroadcast(message, true);
+            // Hides all messages
             message = JToken.Parse(@"{'type':'message','screen':'all'}");
+            SendBroadcast(message, true);
 
+            // Clears player list and loads new scene
             GameLogic.players.Clear();
-            Debug.Log("Number of players: " + GameLogic.players.Count);
             SceneManager.LoadScene("Game");
         }
 
@@ -178,7 +180,7 @@ public class Prototype : MonoBehaviour {
         }
     }
 
-    // Checks if player should die
+    // Checks if screens should change
     void OnTriggerEnter(Collider other) {
         JToken message;
 
@@ -186,13 +188,19 @@ public class Prototype : MonoBehaviour {
         if (other.transform.CompareTag(deathTag)) {
             message = JToken.Parse(@"{'type':'change','screen':'wait-screen'}");
             SendBroadcast(message, true);
+
             message = JToken.Parse(@"{'type':'message','screen':'all'}");
             SendBroadcast(message, true);
+
             SceneManager.LoadScene("Prototype"); // For prototype, reset the scene. For final version, put a death screen here
         // Players won minigame
         } else if (other.transform.CompareTag(winTag)) {
             message = JToken.Parse(@"{'type':'change','screen':'wait-screen'}");
             SendBroadcast(message, true);
+
+            message = JToken.Parse(@"{'type':'message','screen':'all'}");
+            SendBroadcast(message, true);
+
             Debug.Log("Minigame won");
         // Players play wall minigame
         } else if (other.transform.CompareTag(wallTag)) {
@@ -204,10 +212,6 @@ public class Prototype : MonoBehaviour {
             message = JToken.Parse(@"{'type':'change','screen':'tiles-screen'}");
             SendBroadcast(message, true);
             Debug.Log("Minigame tiles");
-
-            // Hide previous messages
-            message = JToken.Parse(@"{'type':'message','screen':'all'}");
-            SendBroadcast(message, true);
 
             // Changes image for each player
             // Hardcoded for now, change this for final version!
