@@ -19,7 +19,6 @@ public class GameLogic : MonoBehaviour {
 
     [HideInInspector] public static List<Player> players = new List<Player>(); // List of all players who are currently playing
     [HideInInspector] public static string roomCode = ""; // The code to connect with the host
-    private bool codeShown = false;
 
     void Awake() {
         AirConsole.instance.onReady += OnReady; // Gets called when the first device connects
@@ -147,7 +146,7 @@ public class GameLogic : MonoBehaviour {
         Vector3 newPosition = newProfile.GetComponent<RectTransform>().anchoredPosition;
         newPosition.y = 365 - players.Count * 75;
         int y = num == -1 ? players.Count : num + 1;
-        newProfile.GetComponent<RectTransform>().anchoredPosition = new Vector3(25, 450 - y * 100, 0);
+        newProfile.GetComponent<RectTransform>().anchoredPosition = new Vector3(-70, 375 - y * 100, 0);
         newProfile.GetComponent<TMP_Text>().text = name;
         playerCount.text = "Players " + players.Count + "/" + maxPlayers;
 

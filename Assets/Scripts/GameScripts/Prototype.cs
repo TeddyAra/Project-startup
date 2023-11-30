@@ -59,11 +59,11 @@ public class Prototype : MonoBehaviour {
         if (data["button"] != null) {
             // If the spam button has been pressed
             if (data["button"].ToString().Equals("spam")) {
-                Debug.Log("Spam clicked");
+                //Debug.Log("Spam clicked");
                 spamClicks[id]++;
                 if (spamClicks[id] >= clickNumToShoot) {
                     spamClicks[id] = 0;
-                    Debug.Log("Fireball!");
+                    //Debug.Log("Fireball!");
                     
                     GameObject newFireball = Instantiate(fireball, fireballPoint.position + Vector3.right * UnityEngine.Random.Range(-3f, 3f), Quaternion.identity);
                     newFireball.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 20);
@@ -82,6 +82,8 @@ public class Prototype : MonoBehaviour {
     // Sends a message to a range of devices
     public void SendBroadcast(JToken msg, bool exclusive = false) {
         if (!usingAirConsole) return;
+
+        Debug.Log("Broadcast sent");
 
         // Only sends broadcast to devices currently playing
         if (exclusive) {
