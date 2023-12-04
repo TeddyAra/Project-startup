@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -129,7 +130,7 @@ public class Prototype : MonoBehaviour {
         }
 
         // Spawn position
-        checkpoint = transform.position;
+        checkpoint = transform.position + Vector3.up * 2f;
     }
 
     void Update() {
@@ -227,19 +228,18 @@ public class Prototype : MonoBehaviour {
         JToken message;
 
         // Host died
-        if (other.transform.CompareTag(deathTag))
-        {
+        if (other.transform.CompareTag(deathTag)) {
             message = JToken.Parse(@"{'type':'change','screen':'wait-screen'}");
             SendBroadcast(message, true);
 
             message = JToken.Parse(@"{'type':'message','screen':'all'}");
             SendBroadcast(message, true);
 
-            SceneManager.LoadScene("Prototype"); // For prototype, reset the scene. For final version, put a death screen here
-                                                 // Players won minigame
-        }
-        else if (other.transform.CompareTag(winTag))
-        {
+            SceneManager.LoadScene("Prototype"); 
+            
+        // For prototype, reset the scene. For final version, put a death screen here
+        // Players won minigame
+        } else if (other.transform.CompareTag(winTag)) {
             message = JToken.Parse(@"{'type':'change','screen':'wait-screen'}");
             SendBroadcast(message, true);
 
@@ -249,28 +249,22 @@ public class Prototype : MonoBehaviour {
             colourMinigame = false;
 
             Debug.Log("Minigame won");
-            // Players play wall minigame
-        }
-        else if (other.transform.CompareTag(wallTag))
-        {
+        // Players play wall minigame
+        } else if (other.transform.CompareTag(wallTag)) {
             message = JToken.Parse(@"{'type':'change','screen':'wall-screen'}");
             SendBroadcast(message, true);
             Debug.Log("Minigame wall");
-            // Players play tiles minigame
-        }
-        else if (other.transform.CompareTag(tileTag))
-        {
+        // Players play tiles minigame
+        } else if (other.transform.CompareTag(tileTag)) {
             message = JToken.Parse(@"{'type':'change','screen':'tiles-screen'}");
             SendBroadcast(message, true);
             Debug.Log("Minigame tiles");
 
             // Changes image for each player
             // Hardcoded for now, change this for final version!
-            for (int i = 0; i < GameLogic.players.Count; i++)
-            {
+            for (int i = 0; i < GameLogic.players.Count; i++) {
                 string msg = "";
-                switch (i)
-                {
+                switch (i) {
                     case 0:
                         msg = @"{'type':'message','message':'one'}";
                         break;
@@ -284,9 +278,7 @@ public class Prototype : MonoBehaviour {
                 message = JToken.Parse(msg);
                 SendMessage(GameLogic.players[i].id, message);
             }
-        }
-        else if (other.transform.CompareTag(coloursTag))
-        {
+        } else if (other.transform.CompareTag(coloursTag)) {
             colourMinigame = true;
 
             message = JToken.Parse(@"{'type':'change','screen':'colours-screen'}");
@@ -295,11 +287,9 @@ public class Prototype : MonoBehaviour {
 
             // Changes colours for each player
             // Hardcoded for now, change this for final version!
-            for (int i = 0; i < GameLogic.players.Count; i++)
-            {
+            for (int i = 0; i < GameLogic.players.Count; i++) {
                 string msg = "";
-                switch (i)
-                {
+                switch (i) {
                     case 0:
                         msg = @"{'type':'message','message':'colours-one'}";
                         break;
@@ -313,14 +303,21 @@ public class Prototype : MonoBehaviour {
                 message = JToken.Parse(msg);
                 SendMessage(GameLogic.players[i].id, message);
             }
-        }
-        else if (other.transform.CompareTag(checkpointTag)) {
+        } else if (other.transform.CompareTag(checkpointTag)) {
             checkpoint = other.transform.position;
         }
     }
 
+    void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.CompareTag(deathTag) && collision.transform.position.y > 1) {
+            KnockBack();
+        }
+    }
+
     public void KnockBack() {
+        controller.enabled = false;
         transform.position = checkpoint;
+        controller.enabled = true;
         Debug.Log($"Knocking back to {checkpoint}!");
     }
 
