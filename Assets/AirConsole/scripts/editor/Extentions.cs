@@ -5,6 +5,7 @@ using System.Collections;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using WebSocketSharp;
 
 namespace NDream.AirConsole.Editor {
 	[InitializeOnLoad]
@@ -131,9 +132,19 @@ namespace NDream.AirConsole.Editor {
 		}
 
 		public static string GetLocalAddress () {
-			if(!string.IsNullOrEmpty(AirConsole.instance.LocalIpOverride)) {
+			// Old AirConsole code, works with changing local ip override in the inspector!
+			/*if(!string.IsNullOrEmpty(AirConsole.instance.LocalIpOverride)) {
 				return AirConsole.instance.LocalIpOverride;
+			}*/
+
+			// New, self-made code, works with reading local ip override from .txt file!
+			StreamReader sr = new StreamReader("Assets/LocalIPOverride.txt");
+			string address = sr.ReadToEnd();
+
+			if (!address.IsNullOrEmpty()) {
+				return address;
 			}
+
 			string localIP = "";
 
 			using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0)) {
