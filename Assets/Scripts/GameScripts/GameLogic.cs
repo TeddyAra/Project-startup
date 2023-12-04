@@ -16,6 +16,7 @@ public class GameLogic : MonoBehaviour {
     [SerializeField] TMP_Text playCode; // Text that shows the code on screen
     [SerializeField] GameObject profile; // Prefab for player profiles on the starting screen
     [SerializeField] GameObject playButton; // Button to play the game
+    [SerializeField] List<Color> colours; // The colours that players can have/be
 
     [HideInInspector] public static List<Player> players = new List<Player>(); // List of all players who are currently playing
     [HideInInspector] public static string roomCode = ""; // The code to connect with the host
@@ -139,6 +140,7 @@ public class GameLogic : MonoBehaviour {
             newPlayer.username = name;
             newPlayer.id = id;
             newPlayer.profile = newProfile;
+            newPlayer.colour = colours[players.Count];
             players.Add(newPlayer);
         }
 
