@@ -309,7 +309,9 @@ public class Prototype : MonoBehaviour {
     }
 
     void OnCollisionEnter(Collision collision) {
+        Debug.Log("Collision");
         if (collision.gameObject.CompareTag(deathTag) && collision.transform.position.y > 1) {
+            Debug.Log("Knocking back");
             KnockBack();
         }
     }

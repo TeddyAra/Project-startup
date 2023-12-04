@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1042247427946852868}
   - component: {fileID: 8764082117043306312}
   - component: {fileID: 6918338311946479644}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Branch
   m_TagString: Death
   m_Icon: {fileID: 0}
@@ -134,4 +134,4 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1

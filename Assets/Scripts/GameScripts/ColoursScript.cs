@@ -79,14 +79,18 @@ public class ColoursScript : MonoBehaviour {
         }
     }
 
+    // Move the door up
     IEnumerator MoveDoor() {
+        // Change the light's color
         indicator.color = correctColor;
 
+        // Move the door
         while (door.position.y < 8.5f) {
             door.transform.Translate(0, Time.deltaTime, 0);
             yield return null;
         }
 
+        // Put the door at the right place
         Vector3 position = door.position;
         position.y = 8.5f;
         door.position = position;
@@ -95,11 +99,15 @@ public class ColoursScript : MonoBehaviour {
     void CheckButtonStates() {
         // If it's been pressed in the wrong order
         if (pressedButton != buttons[currentButton]) {
-            Debug.Log("Wrong");
+            // Move all buttons back up
             foreach (GameObject item in buttons) {
                 StartCoroutine(MoveButton(item, false));
             }
+
+            // Reset current button 
             currentButton = 0;
+
+            // Knock player back
             prototypeScript.KnockBack();
             return;
         }

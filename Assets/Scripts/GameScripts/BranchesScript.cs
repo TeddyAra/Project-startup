@@ -10,26 +10,18 @@ public class BranchesScript : MonoBehaviour {
     [SerializeField] float spawnRange; // How far away can the branch spawn
     [SerializeField] float branchLifeTime; // For how long should the branch exist
     [SerializeField] float spawnDistance; // How far forward should the branch spawn
+    [SerializeField] float maxDistance; // The max distance a branch can be before being removed
 
-    private float timer;
-    private Dictionary<GameObject, float> branches;
+    private float timer; // The timer that keeps track of when to spawn a branch
+    private List<GameObject> branches; // All branches
 
     void Start() {
-        branches = new Dictionary<GameObject, float>();
+        branches = new List<GameObject>();
     }
 
     void Update() {
         // Adds time to timer and branch lifetime
         timer += Time.deltaTime;
-
-        foreach (var item in branches.Keys.ToList()) {
-            branches[item] += Time.deltaTime;
-            // Remove branch
-            if (branches[item] > branchLifeTime) {
-                branches.Remove(item);
-                Destroy(item);
-            }
-        }
 
         // Spawn a new branch
         if (timer > spawnTime) {
@@ -44,7 +36,15 @@ public class BranchesScript : MonoBehaviour {
 
             // Create the branch and add it to the dictionary
             GameObject newBranch = Instantiate(branch, position, Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
-            branches.Add(newBranch, 0);
+            branches.Add(newBranch);
+
+            // Check which branches can be removed
+            foreach (GameObject item in branches.ToList()) {
+                if ((item.transform.position - transform.position).magnitude > maxDistance) {
+                    branches.Remove(item);
+                    Destroy(item);
+                }
+            }
         }
     }
 }
