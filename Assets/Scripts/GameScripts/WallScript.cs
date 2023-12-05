@@ -8,12 +8,15 @@ public class WallScript : MonoBehaviour {
     [SerializeField] private int health;
     [SerializeField] private bool playerDependentHealth;
     [SerializeField] private GameObject player;
-    [SerializeField] private Prototype prototypeScript;
+    
+    private Prototype prototypeScript;
 
     void Start() {
         if (playerDependentHealth) {
             health *= GameLogic.players.Count;
         }
+
+        prototypeScript = player.GetComponent<Prototype>();
     }
 
     void OnCollisionEnter(Collision collision) {
@@ -21,11 +24,12 @@ public class WallScript : MonoBehaviour {
         Destroy(collision.gameObject);
         health--;
 
-        if (health <= 0) { 
-            transform.gameObject.SetActive(false);
+        if (health <= 0) {
+            Debug.Log("Wall destroyed!");
+            JToken message = JToken.Parse(@"{'type':'change','screen':'wait-screen'}");
+            prototypeScript.SendBroadcast(message, true);
 
-            JToken msg = JToken.Parse(@"{'type':'message','screen':'all'}");
-            prototypeScript.SendBroadcast(msg, true);
+            transform.gameObject.SetActive(false);
         }
     }
 }

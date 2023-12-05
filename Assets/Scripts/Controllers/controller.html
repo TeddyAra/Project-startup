@@ -29,6 +29,7 @@
     --black: #2C2C2C; 
     --inputgrey: #555555; 
     --blue: #0A468C; 
+    --yellow: #FEE12B;
 }
 
   
@@ -223,6 +224,35 @@
       margin-top: 2rem;
     }
 
+    .colours {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .colour {
+      width: 30vw;
+      height: 20vw;
+
+      margin: 10px 5vw;
+      border-radius: 5rem;
+    }
+
+    #red {
+      background-color: var(--red);
+    }
+
+    #yellow {
+      background-color: var(--yellow);
+    }
+
+    #blue {
+      background-color: var(--blue);
+    }
+
+    #number {
+      text-align: center;
+    }
   </style>
 
   <script type="text/javascript">
@@ -421,6 +451,38 @@
       <p class="paragraph">Burn down the magical vine wall by throwing fireballs at it! </p>
       <div class="spambutton" ontouchstart="window.app.sendMessageToScreen('button', 'spam')">
         <p>SPAM!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Screen for colours game -->
+  <div class="screen" id="colours-screen">
+    <div class="startmenu">
+      <h1 class="header">Colored buttons</h1>
+      <p class="paragraph">Step on the buttons in the right order to open the door! </p>
+      <div class="message" id="colours-one">
+        <p class="header" id="number">1</p>
+        <div class="colours">
+          <div class="colour" id="red"></div>
+          <h1 class="header">+</h1>
+          <div class="colour" id="yellow"></div>
+        </div>
+      </div>
+      <div class="message" id="colours-two">
+        <p class="header" id="number">2</p>
+        <div class="colours">
+          <div class="colour" id="blue"></div>
+          <h1 class="header">+</h1>
+          <div class="colour" id="yellow"></div>
+        </div>
+      </div>
+      <div class="message" id="colours-three">
+        <p class="header" id="number">3</p>
+        <div class="colours">
+          <div class="colour" id="red"></div>
+          <h1 class="header">+</h1>
+          <div class="colour" id="blue"></div>
+        </div>
       </div>
     </div>
   </div>

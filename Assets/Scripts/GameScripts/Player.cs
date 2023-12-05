@@ -8,6 +8,7 @@ public class Player : ScriptableObject {
     public int id; // Device id
     public GameObject profile; // The position of the profile
     public int clickCounter = 0; // Click counter for the wall destroy minigame
+    public Color colour = Color.white; // The colour associated with the player
 
     /*public Player(string username, int id, GameObject profile) {
         this.username = username;

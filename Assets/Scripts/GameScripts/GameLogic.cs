@@ -16,10 +16,10 @@ public class GameLogic : MonoBehaviour {
     [SerializeField] TMP_Text playCode; // Text that shows the code on screen
     [SerializeField] GameObject profile; // Prefab for player profiles on the starting screen
     [SerializeField] GameObject playButton; // Button to play the game
+    [SerializeField] List<Color> colours; // The colours that players can have/be
 
     [HideInInspector] public static List<Player> players = new List<Player>(); // List of all players who are currently playing
     [HideInInspector] public static string roomCode = ""; // The code to connect with the host
-    private bool codeShown = false;
 
     void Awake() {
         AirConsole.instance.onReady += OnReady; // Gets called when the first device connects
@@ -140,6 +140,7 @@ public class GameLogic : MonoBehaviour {
             newPlayer.username = name;
             newPlayer.id = id;
             newPlayer.profile = newProfile;
+            newPlayer.colour = colours[players.Count];
             players.Add(newPlayer);
         }
 
@@ -147,7 +148,7 @@ public class GameLogic : MonoBehaviour {
         Vector3 newPosition = newProfile.GetComponent<RectTransform>().anchoredPosition;
         newPosition.y = 365 - players.Count * 75;
         int y = num == -1 ? players.Count : num + 1;
-        newProfile.GetComponent<RectTransform>().anchoredPosition = new Vector3(25, 450 - y * 100, 0);
+        newProfile.GetComponent<RectTransform>().anchoredPosition = new Vector3(-70, 375 - y * 100, 0);
         newProfile.GetComponent<TMP_Text>().text = name;
         playerCount.text = "Players " + players.Count + "/" + maxPlayers;
 

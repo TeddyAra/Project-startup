@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -35,6 +36,9 @@ public class Prototype : MonoBehaviour {
     [SerializeField] private string deathTag = "Death";
     [SerializeField] private string wallTag = "Wall";
     [SerializeField] private string tileTag = "Tiles";
+    [SerializeField] private string coloursTag = "Colours";
+    [SerializeField] private string buttonTag = "Button";
+    [SerializeField] private string checkpointTag = "Checkpoint";
     [SerializeField] private float fireballLifeTime = 5;
     [SerializeField] private bool camIgnoreX = true;
 
@@ -47,6 +51,11 @@ public class Prototype : MonoBehaviour {
     private Vector3 fallVelocity;
     private Dictionary<int, int> spamClicks;
     [HideInInspector] public Dictionary<GameObject, float> fireballs;
+    [HideInInspector] public bool colourMinigame;
+    [HideInInspector] public GameObject possibleButton;
+    private bool previousButton;
+    [HideInInspector] public bool standingOnWrongButton;
+    private Vector3 checkpoint;
 
     void Awake() {
         if (usingAirConsole) AirConsole.instance.onMessage += OnMessage;
@@ -59,14 +68,24 @@ public class Prototype : MonoBehaviour {
         if (data["button"] != null) {
             // If the spam button has been pressed
             if (data["button"].ToString().Equals("spam")) {
-                Debug.Log("Spam clicked");
+                //Debug.Log("Spam clicked");
                 spamClicks[id]++;
                 if (spamClicks[id] >= clickNumToShoot) {
                     spamClicks[id] = 0;
-                    Debug.Log("Fireball!");
+                    //Debug.Log("Fireball!");
                     
                     GameObject newFireball = Instantiate(fireball, fireballPoint.position + Vector3.right * UnityEngine.Random.Range(-3f, 3f), Quaternion.identity);
                     newFireball.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 20);
+
+                    Color colour = Color.white;
+                    foreach (Player player in GameLogic.players) {
+                        if (player.id == id) {
+                            colour = player.colour;
+                            break;
+                        }
+                    }
+                    newFireball.GetComponent<Renderer>().material.color = colour;
+
                     fireballs.Add(newFireball, 0);
                 }
             }
@@ -82,6 +101,8 @@ public class Prototype : MonoBehaviour {
     // Sends a message to a range of devices
     public void SendBroadcast(JToken msg, bool exclusive = false) {
         if (!usingAirConsole) return;
+
+        Debug.Log("Broadcast sent");
 
         // Only sends broadcast to devices currently playing
         if (exclusive) {
@@ -107,6 +128,9 @@ public class Prototype : MonoBehaviour {
         foreach (Player player in GameLogic.players) {
             spamClicks.Add(player.id, 0);
         }
+
+        // Spawn position
+        checkpoint = transform.position + Vector3.up * 2f;
     }
 
     void Update() {
@@ -174,8 +198,22 @@ public class Prototype : MonoBehaviour {
         controller.Move(move * speed * Time.deltaTime);
 
         // Checks if player is on a falling tile
+        previousButton = possibleButton;
+
         RaycastHit hit;
         if (Physics.Raycast(transform.position, Vector3.down, out hit, distanceCheck, groundMask)) {
+            if (!standingOnWrongButton) {
+                if (hit.transform.CompareTag(buttonTag)) {
+                    possibleButton = hit.transform.gameObject;
+                } else {
+                    possibleButton = null;
+                }
+            }
+
+            if (hit.transform.gameObject != previousButton) {
+                standingOnWrongButton = false;
+            }
+
             if (hit.transform.CompareTag(fallTileTag)) {
                 fallPosition = hit.transform.position;
                 hit.transform.gameObject.AddComponent<Rigidbody>();
@@ -197,7 +235,9 @@ public class Prototype : MonoBehaviour {
             message = JToken.Parse(@"{'type':'message','screen':'all'}");
             SendBroadcast(message, true);
 
-            SceneManager.LoadScene("Prototype"); // For prototype, reset the scene. For final version, put a death screen here
+            SceneManager.LoadScene("Prototype"); 
+            
+        // For prototype, reset the scene. For final version, put a death screen here
         // Players won minigame
         } else if (other.transform.CompareTag(winTag)) {
             message = JToken.Parse(@"{'type':'change','screen':'wait-screen'}");
@@ -205,6 +245,8 @@ public class Prototype : MonoBehaviour {
 
             message = JToken.Parse(@"{'type':'message','screen':'all'}");
             SendBroadcast(message, true);
+
+            colourMinigame = false;
 
             Debug.Log("Minigame won");
         // Players play wall minigame
@@ -236,7 +278,49 @@ public class Prototype : MonoBehaviour {
                 message = JToken.Parse(msg);
                 SendMessage(GameLogic.players[i].id, message);
             }
+        } else if (other.transform.CompareTag(coloursTag)) {
+            colourMinigame = true;
+
+            message = JToken.Parse(@"{'type':'change','screen':'colours-screen'}");
+            SendBroadcast(message, true);
+            Debug.Log("Minigame colours");
+
+            // Changes colours for each player
+            // Hardcoded for now, change this for final version!
+            for (int i = 0; i < GameLogic.players.Count; i++) {
+                string msg = "";
+                switch (i) {
+                    case 0:
+                        msg = @"{'type':'message','message':'colours-one'}";
+                        break;
+                    case 1:
+                        msg = @"{'type':'message','message':'colours-two'}";
+                        break;
+                    case 2:
+                        msg = @"{'type':'message','message':'colours-three'}";
+                        break;
+                }
+                message = JToken.Parse(msg);
+                SendMessage(GameLogic.players[i].id, message);
+            }
+        } else if (other.transform.CompareTag(checkpointTag)) {
+            checkpoint = other.transform.position;
         }
+    }
+
+    void OnCollisionEnter(Collision collision) {
+        Debug.Log("Collision");
+        if (collision.gameObject.CompareTag(deathTag) && collision.transform.position.y > 1) {
+            Debug.Log("Knocking back");
+            KnockBack();
+        }
+    }
+
+    public void KnockBack() {
+        controller.enabled = false;
+        transform.position = checkpoint;
+        controller.enabled = true;
+        Debug.Log($"Knocking back to {checkpoint}!");
     }
 
     void OnDestroy() {
