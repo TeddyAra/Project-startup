@@ -6,6 +6,8 @@ using UnityEngine;
 public class BranchesScript : MonoBehaviour {
     [SerializeField] GameObject branch; // Branch prefab
     [SerializeField] float spawnTime; // After how much time should a branch be spawned
+    [SerializeField] float spawnSpeedUp; // With how much should the timer decrease every time a branch spawns
+    [SerializeField] float minimumTime; // The absolute minimum time it should take for a branch to spawn
     [SerializeField] float spawnHeight; // How high up should the branch spawn
     [SerializeField] float spawnRange; // How far away can the branch spawn
     [SerializeField] float branchLifeTime; // For how long should the branch exist
@@ -25,6 +27,11 @@ public class BranchesScript : MonoBehaviour {
 
         // Spawn a new branch
         if (timer > spawnTime) {
+            // Decreases spawnTime
+            spawnTime -= spawnSpeedUp;
+            if (spawnTime < minimumTime) 
+                spawnTime = minimumTime;
+
             // Reset timer and get the base position
             timer = 0f;
             Vector3 position = transform.position;

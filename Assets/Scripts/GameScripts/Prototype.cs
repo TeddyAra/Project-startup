@@ -138,12 +138,12 @@ public class Prototype : MonoBehaviour {
     }
 
     void Update() {
-        /*if (!animator.isAnimationPlaying(animator.jump)) {
+        if (!animator.isAnimationPlaying(animator.jump)) {
             if (move.magnitude > 0)
                 animator.ChangeAnimationState(animator.walk);
             else 
                 animator.ChangeAnimationState(animator.idle);
-        }*/
+        }
 
         // Continues timer for each fireball
         for (int i = 0; i < fireballs.Count; i++) { 
@@ -210,8 +210,8 @@ public class Prototype : MonoBehaviour {
         controller.Move(move * speed * Time.deltaTime);
 
         // Rotates player to move direction
-        if (move.magnitude > 0) { 
-            transform.rotation.SetLookRotation(move);
+        if (move.magnitude > 0) {
+            playerModel.transform.LookAt(transform.position + move);
         }
 
         // Checks if player is on a falling tile

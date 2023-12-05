@@ -11,10 +11,12 @@ public class AnimationScript : MonoBehaviour {
     public string walk = "walking";
 
     void Start() {
-        ChangeAnimationState(walk);
+        ChangeAnimationState(jump);
     }
 
     public void ChangeAnimationState(string newState) {
+        Debug.Log(newState + " " + (newState == currentState));
+
         if (newState == currentState) {
             return;
         }
