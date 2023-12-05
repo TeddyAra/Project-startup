@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 2649373461123913716}
   - component: {fileID: 42503282645022952}
   - component: {fileID: 2315455231940348227}
+  - component: {fileID: 9142005185131356818}
+  - component: {fileID: 4179897978479234957}
+  - component: {fileID: 5795509537480416908}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -85,19 +88,82 @@ MonoBehaviour:
     m_Bits: 0
   fireball: {fileID: 1780196050262597136, guid: 3652823dbf49ae4489ff167ec7960f7d,
     type: 3}
+  usingAirConsole: 0
   speed: 3
   gravity: -9.81
   groundDistance: 0.4
   jumpHeight: 1
   distanceCheck: 0.25
-  clickNumToShoot: 10
+  clickNumToShoot: 5
   fallTileTag: Fall
   winTag: Win
   deathTag: Death
   wallTag: Wall
   tileTag: Tiles
+  coloursTag: Colours
+  buttonTag: Button
+  checkpointTag: Checkpoint
   fireballLifeTime: 5
   camIgnoreX: 1
+  colourMinigame: 0
+  possibleButton: {fileID: 0}
+  standingOnWrongButton: 0
+--- !u!114 &9142005185131356818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636415653091840168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295252651c183f242b3f2f5dd1b0e98e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  distance: 2.5
+--- !u!114 &4179897978479234957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636415653091840168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b58f50830c96a4740a39da5c7025890d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  branch: {fileID: 6633598194392091361, guid: 68812b985d4c5a246b522ff58224ab3a, type: 3}
+  spawnTime: 3
+  spawnHeight: 20
+  spawnRange: 4
+  branchLifeTime: 5
+  spawnDistance: 6
+  maxDistance: 100
+--- !u!136 &5795509537480416908
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636415653091840168}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &4122001965939767876
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,6 +175,8 @@ GameObject:
   - component: {fileID: 7956796141591768752}
   - component: {fileID: 774079966057304489}
   - component: {fileID: 3732105969620779388}
+  - component: {fileID: 3558439853823479036}
+  - component: {fileID: 4455559800974535122}
   m_Layer: 0
   m_Name: Visualizer
   m_TagString: Untagged
@@ -181,6 +249,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!111 &3558439853823479036
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4122001965939767876}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: -203655887218126122, guid: 626df7bfcf70e1142bd890910ab64ab6, type: 3}
+  - {fileID: -203655887218126122, guid: 5299509d1445e944dbe5035671effca4, type: 3}
+  - {fileID: -203655887218126122, guid: b998cbb913ee2784ab706c33a187cfa2, type: 3}
+  m_WrapMode: 0
+  m_PlayAutomatically: 1
+  m_AnimatePhysics: 0
+  m_CullingType: 0
+--- !u!114 &4455559800974535122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4122001965939767876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b51c592140cd47244972cb555ca8a132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  state: 0
+  animations:
+  - idle
+  - walking
+  - jump
 --- !u!1 &7905371105981848548
 GameObject:
   m_ObjectHideFlags: 0

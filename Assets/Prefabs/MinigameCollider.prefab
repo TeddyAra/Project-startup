@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5224681170214194602}
   - component: {fileID: 8436576904139549878}
   - component: {fileID: 1520275359483916854}
+  - component: {fileID: 2953787262838299893}
   m_Layer: 0
   m_Name: MinigameCollider
   m_TagString: Win
@@ -62,3 +63,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2953787262838299893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 614815627485124039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf3c357614d4ba43b9e38a2b7fcfbec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variation: 1

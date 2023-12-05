@@ -21,6 +21,7 @@ public class Prototype : MonoBehaviour {
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private LayerMask defaultMask;
     [SerializeField] private GameObject fireball;
+    [SerializeField] private GameObject playerModel;
 
     // Settings
     [Header("Settings")]
@@ -56,9 +57,11 @@ public class Prototype : MonoBehaviour {
     private bool previousButton;
     [HideInInspector] public bool standingOnWrongButton;
     private Vector3 checkpoint;
+    private AnimationScript animator;
 
     void Awake() {
         if (usingAirConsole) AirConsole.instance.onMessage += OnMessage;
+        animator = playerModel.GetComponent<AnimationScript>();
     }
 
     void OnMessage(int id, JToken data) {
@@ -95,6 +98,7 @@ public class Prototype : MonoBehaviour {
     void SendMessage(int id, JToken data) {
         if (!usingAirConsole) return;
 
+        Debug.Log(data);
         AirConsole.instance.Message(id, data);
     }
 
@@ -134,6 +138,13 @@ public class Prototype : MonoBehaviour {
     }
 
     void Update() {
+        /*if (!animator.isAnimationPlaying(animator.jump)) {
+            if (move.magnitude > 0)
+                animator.ChangeAnimationState(animator.walk);
+            else 
+                animator.ChangeAnimationState(animator.idle);
+        }*/
+
         // Continues timer for each fireball
         for (int i = 0; i < fireballs.Count; i++) { 
             GameObject currentFireball = fireballs.ElementAt(i).Key;
@@ -169,6 +180,7 @@ public class Prototype : MonoBehaviour {
 
         if (Input.GetButtonDown("Fire1") && isGrounded && !isDead) {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            animator.ChangeAnimationState(animator.jump);
         }
 
         velocity.y += gravity * Time.deltaTime;
@@ -196,6 +208,11 @@ public class Prototype : MonoBehaviour {
         // Applies input        
         move = transform.right * x + transform.forward * z;
         controller.Move(move * speed * Time.deltaTime);
+
+        // Rotates player to move direction
+        if (move.magnitude > 0) { 
+            transform.rotation.SetLookRotation(move);
+        }
 
         // Checks if player is on a falling tile
         previousButton = possibleButton;
@@ -261,22 +278,85 @@ public class Prototype : MonoBehaviour {
             Debug.Log("Minigame tiles");
 
             // Changes image for each player
-            // Hardcoded for now, change this for final version!
-            for (int i = 0; i < GameLogic.players.Count; i++) {
-                string msg = "";
-                switch (i) {
-                    case 0:
-                        msg = @"{'type':'message','message':'one'}";
-                        break;
-                    case 1:
-                        msg = @"{'type':'message','message':'two'}";
-                        break;
-                    case 2:
-                        msg = @"{'type':'message','message':'three'}";
-                        break;
-                }
-                message = JToken.Parse(msg);
-                SendMessage(GameLogic.players[i].id, message);
+            int tileVariation = other.GetComponent<Variation>().variation;
+
+            switch (tileVariation) {
+                case 0:
+                    Debug.Log(tileVariation);
+                    for (int i = 0; i < GameLogic.players.Count; i++) {
+                        string msg = "";
+                        switch (i) {
+                            case 0:
+                                msg = @"{'type':'message','message':'one'}";
+                                break;
+                            case 1:
+                                msg = @"{'type':'message','message':'two'}";
+                                break;
+                            case 2:
+                                msg = @"{'type':'message','message':'three'}";
+                                break;
+                        }
+                        message = JToken.Parse(msg);
+                        SendMessage(GameLogic.players[i].id, message);
+                    }
+                    break;
+                case 1:
+                    Debug.Log(tileVariation);
+                    for (int i = 0; i < GameLogic.players.Count; i++) {
+                        string msg = "";
+                        switch (i) {
+                            case 0:
+                                msg = @"{'type':'message','message':'four'}";
+                                break;
+                            case 1:
+                                msg = @"{'type':'message','message':'five'}";
+                                break;
+                            case 2:
+                                msg = @"{'type':'message','message':'six'}";
+                                break;
+                        }
+                        message = JToken.Parse(msg);
+                        SendMessage(GameLogic.players[i].id, message);
+                    }
+                    break;
+                case 2:
+                    Debug.Log(tileVariation);
+                    for (int i = 0; i < GameLogic.players.Count; i++) {
+                        string msg = "";
+                        switch (i) {
+                            case 0:
+                                msg = @"{'type':'message','message':'seven'}";
+                                break;
+                            case 1:
+                                msg = @"{'type':'message','message':'eight'}";
+                                break;
+                            case 2:
+                                msg = @"{'type':'message','message':'nine'}";
+                                break;
+                        }
+                        message = JToken.Parse(msg);
+                        SendMessage(GameLogic.players[i].id, message);
+                    }
+                    break;
+                case 3:
+                    Debug.Log(tileVariation);
+                    for (int i = 0; i < GameLogic.players.Count; i++) {
+                        string msg = "";
+                        switch (i) {
+                            case 0:
+                                msg = @"{'type':'message','message':'ten'}";
+                                break;
+                            case 1:
+                                msg = @"{'type':'message','message':'eleven'}";
+                                break;
+                            case 2:
+                                msg = @"{'type':'message','message':'twelve'}";
+                                break;
+                        }
+                        message = JToken.Parse(msg);
+                        SendMessage(GameLogic.players[i].id, message);
+                    }
+                    break;
             }
         } else if (other.transform.CompareTag(coloursTag)) {
             colourMinigame = true;
