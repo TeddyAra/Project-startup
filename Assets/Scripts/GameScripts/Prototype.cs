@@ -366,22 +366,47 @@ public class Prototype : MonoBehaviour {
             Debug.Log("Minigame colours");
 
             // Changes colours for each player
-            // Hardcoded for now, change this for final version!
-            for (int i = 0; i < GameLogic.players.Count; i++) {
-                string msg = "";
-                switch (i) {
-                    case 0:
-                        msg = @"{'type':'message','message':'colours-one'}";
-                        break;
-                    case 1:
-                        msg = @"{'type':'message','message':'colours-two'}";
-                        break;
-                    case 2:
-                        msg = @"{'type':'message','message':'colours-three'}";
-                        break;
-                }
-                message = JToken.Parse(msg);
-                SendMessage(GameLogic.players[i].id, message);
+            int colourVatiation = other.GetComponent<Variation>().variation;
+
+            switch (colourVatiation) {
+                case 0:
+                    Debug.Log(colourVatiation);
+                    for (int i = 0; i < GameLogic.players.Count; i++) {
+                        string msg = "";
+                        switch (i) {
+                            case 0:
+                                msg = @"{'type':'message','message':'colours-one'}";
+                                break;
+                            case 1:
+                                msg = @"{'type':'message','message':'colours-two'}";
+                                break;
+                            case 2:
+                                msg = @"{'type':'message','message':'colours-three'}";
+                                break;
+                        }
+                        message = JToken.Parse(msg);
+                        SendMessage(GameLogic.players[i].id, message);
+                    }
+                    break;
+                case 1:
+                    Debug.Log(colourVatiation);
+                    for (int i = 0; i < GameLogic.players.Count; i++) {
+                        string msg = "";
+                        switch (i) {
+                            case 0:
+                                msg = @"{'type':'message','message':'colours-four'}";
+                                break;
+                            case 1:
+                                msg = @"{'type':'message','message':'colours-five'}";
+                                break;
+                            case 2:
+                                msg = @"{'type':'message','message':'colours-six'}";
+                                break;
+                        }
+                        message = JToken.Parse(msg);
+                        SendMessage(GameLogic.players[i].id, message);
+                    }
+                    break;
             }
         } else if (other.transform.CompareTag(checkpointTag)) {
             checkpoint = other.transform.position;

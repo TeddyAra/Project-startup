@@ -228,6 +228,13 @@
     #number {
       text-align: center;
     }
+
+    #center-colours {
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   </style>
 
   <script type="text/javascript">
@@ -470,28 +477,31 @@
     <div class="startmenu">
       <h1 class="header">Colored buttons</h1>
       <p class="paragraph">Step on the buttons in the right order to open the door! </p>
+      
+      <!-- Variation 1 -->
       <div class="message" id="colours-one">
         <p class="header" id="number">1</p>
-        <div class="colours">
-          <div class="colour" id="red"></div>
-          <h1 class="header">+</h1>
-          <div class="colour" id="yellow"></div>
-        </div>
+        <img src="Images/Color1.1.png" alt="img not found">
       </div>
       <div class="message" id="colours-two">
         <p class="header" id="number">2</p>
-        <div class="colours">
-          <div class="colour" id="blue"></div>
-          <h1 class="header">+</h1>
-          <div class="colour" id="yellow"></div>
-        </div>
+        <img src="Images/Color1.2.png" alt="img not found">
       </div>
       <div class="message" id="colours-three">
         <p class="header" id="number">3</p>
-        <div class="colours">
-          <div class="colour" id="red"></div>
-          <h1 class="header">+</h1>
-          <div class="colour" id="blue"></div>
+        <img src="Images/Color1.3.png" alt="img not found">
+      </div>
+
+      <!-- Variation 2 -->
+      <div id="center-colours">
+        <div class="message" id="colours-four">
+          <img src="Images/Color2.1.png" alt="img not found">
+        </div>
+        <div class="message" id="colours-five">
+          <img src="Images/Color2.2.png" alt="img not found">
+        </div>
+        <div class="message" id="colours-six">
+          <img src="Images/Color2.3.png" alt="img not found">
         </div>
       </div>
     </div>

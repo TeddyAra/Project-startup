@@ -258,12 +258,12 @@ PrefabInstance:
     - target: {fileID: 614815627485124039, guid: b32db2f05bb89b1458452766e460613b,
         type: 3}
       propertyPath: m_TagString
-      value: Tiles
+      value: Colours
       objectReference: {fileID: 0}
     - target: {fileID: 2953787262838299893, guid: b32db2f05bb89b1458452766e460613b,
         type: 3}
       propertyPath: variation
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5224681170214194602, guid: b32db2f05bb89b1458452766e460613b,
         type: 3}
