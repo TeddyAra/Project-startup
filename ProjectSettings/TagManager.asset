@@ -9,6 +9,9 @@ TagManager:
   - Fall
   - Wall
   - Tiles
+  - Colours
+  - Button
+  - Checkpoint
   layers:
   - Default
   - TransparentFX
