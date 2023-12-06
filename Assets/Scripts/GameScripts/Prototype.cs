@@ -68,7 +68,7 @@ public class Prototype : MonoBehaviour {
     public AudioClip jump; 
     public AudioClip jumpLand; 
     public AudioClip fireBall; 
-    public AudioClip waterFall; 
+    public AudioClip waterFall;
 
     void Awake() {
         if (usingAirConsole) AirConsole.instance.onMessage += OnMessage;
@@ -198,6 +198,7 @@ public class Prototype : MonoBehaviour {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             animator.AnimateJump(); 
             audioSource.PlayOneShot(jump); 
+            
         }
 
         velocity.y += gravity * Time.deltaTime;
