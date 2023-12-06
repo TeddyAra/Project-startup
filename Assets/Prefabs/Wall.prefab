@@ -121,3 +121,4 @@ MonoBehaviour:
   health: 3
   playerDependentHealth: 1
   player: {fileID: 0}
+  fireBallTag: FireBall

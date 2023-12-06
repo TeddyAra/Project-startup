@@ -9,9 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2689125662288794381}
+  - component: {fileID: 1878761939219578701}
+  - component: {fileID: 3760347271962436857}
   m_Layer: 0
   m_Name: vines
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -33,6 +35,43 @@ Transform:
   - {fileID: 6840162405198983148}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1878761939219578701
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5931178231591995637}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.05, y: 15.29, z: 15.02}
+  m_Center: {x: 0, y: 8.04, z: 0}
+--- !u!114 &3760347271962436857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5931178231591995637}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cb8d4c88e2d24f43a6af07a120b0332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 3
+  playerDependentHealth: 1
+  player: {fileID: 0}
+  fireBallTag: FireBall
 --- !u!1 &7746931311675571867
 GameObject:
   m_ObjectHideFlags: 0

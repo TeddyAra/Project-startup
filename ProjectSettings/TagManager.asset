@@ -12,6 +12,7 @@ TagManager:
   - Colours
   - Button
   - Checkpoint
+  - FireBall
   layers:
   - Default
   - TransparentFX

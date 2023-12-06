@@ -16,12 +16,13 @@ public class BranchesScript : MonoBehaviour {
 
     private float timer; // The timer that keeps track of when to spawn a branch
     private List<GameObject> branches; // All branches
-
+    private bool firstHit; 
     void Start() {
         branches = new List<GameObject>();
     }
 
     void Update() {
+
         // Adds time to timer and branch lifetime
         timer += Time.deltaTime;
 
@@ -54,4 +55,5 @@ public class BranchesScript : MonoBehaviour {
             }
         }
     }
+
 }

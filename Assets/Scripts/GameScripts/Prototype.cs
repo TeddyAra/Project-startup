@@ -46,6 +46,7 @@ public class Prototype : MonoBehaviour {
     // Variables
     private Vector3 velocity;
     private bool isGrounded;
+    private bool prevIsGrounded; 
     private bool isDead;
     private Vector3 move;
     private Vector3 fallPosition;
@@ -150,6 +151,7 @@ public class Prototype : MonoBehaviour {
     }
 
     void Update() {
+        prevIsGrounded = isGrounded;
         if (move.magnitude > 0) {
             animator.ChangeAnimationState(true);
         } else {
@@ -184,6 +186,9 @@ public class Prototype : MonoBehaviour {
 
         // Calculates gravity and jump force
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        if (isGrounded != prevIsGrounded && isGrounded)
+            audioSource.PlayOneShot(jumpLand); 
+            
 
         if (isGrounded && velocity.y < 0) {
             velocity.y = -2f;

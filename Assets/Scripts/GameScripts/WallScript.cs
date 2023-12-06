@@ -10,6 +10,7 @@ public class WallScript : MonoBehaviour {
     [SerializeField] private GameObject player;
     
     private Prototype prototypeScript;
+    [SerializeField] private string fireBallTag; 
 
     void Start() {
         if (playerDependentHealth) {
@@ -20,6 +21,8 @@ public class WallScript : MonoBehaviour {
     }
 
     void OnCollisionEnter(Collision collision) {
+        Debug.Log("fire balls"); 
+        if (!collision.transform.CompareTag(fireBallTag)) return; 
         player.GetComponent<Prototype>().fireballs.Remove(collision.gameObject);
         Destroy(collision.gameObject);
         health--;
