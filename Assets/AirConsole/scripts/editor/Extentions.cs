@@ -139,9 +139,9 @@ namespace NDream.AirConsole.Editor {
 
 			// New, self-made code, works with reading local ip override from .txt file!
 			StreamReader sr = new StreamReader("Assets/LocalIPOverride.txt");
-			string address = sr.ReadToEnd();
+			string address = "https://norfolk-affordable-pounds-butterfly.trycloudflare.com";//sr.ReadToEnd();
 
-			if (!address.IsNullOrEmpty()) {
+			if (!string.IsNullOrEmpty(address)) {
 				return address;
 			}
 
