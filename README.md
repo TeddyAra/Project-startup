@@ -11,7 +11,7 @@ https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/ge
 Now, in PowerShell, relocate to the folder where cloudflared.exe has been installed to. 
 This will most likely be your downloads folder (cd Downloads).
 
-Then type .\cloudflared.exe tunnel --url http://localhost:7842/
+Then type `.\cloudflared.exe tunnel --url http://localhost:7842/`
 This will generate a new link, which you have to copy.
 
 # Playing the game
