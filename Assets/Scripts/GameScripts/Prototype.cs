@@ -180,7 +180,7 @@ public class Prototype : MonoBehaviour {
 
             // Clears player list and loads new scene
             GameLogic.players.Clear();
-            SceneManager.LoadScene("Game");
+            SceneManager.LoadScene("Alex Scene");
         }
 
         // Calculates gravity and jump force

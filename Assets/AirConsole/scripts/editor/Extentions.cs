@@ -113,6 +113,7 @@ namespace NDream.AirConsole.Editor {
 					if (controller.browserStartMode != StartMode.NoBrowserStart) {
 
 						string url = AirConsole.GetUrl (controller.browserStartMode) + GetLocalAddress () + "/";
+						Debug.Log("URL: " + url);
 
 						// add port info if starting the unity editor version
 						if (startUpPath.Contains (Settings.WEBTEMPLATE_PATH)) {
@@ -137,9 +138,9 @@ namespace NDream.AirConsole.Editor {
 				return AirConsole.instance.LocalIpOverride;
 			}*/
 
-			// New, self-made code, works with reading local ip override from .txt file!
-			StreamReader sr = new StreamReader("Assets/LocalIPOverride.txt");
-			string address = "https://norfolk-affordable-pounds-butterfly.trycloudflare.com";//sr.ReadToEnd();
+			// New, self-made code, works with reading local ip override from input field!
+			string address = "https://alarm-queensland-floating-without.trycloudflare.com";
+			Debug.Log(address);
 
 			if (!string.IsNullOrEmpty(address)) {
 				return address;

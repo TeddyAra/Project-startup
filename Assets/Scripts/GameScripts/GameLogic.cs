@@ -16,10 +16,14 @@ public class GameLogic : MonoBehaviour {
     [SerializeField] TMP_Text playCode; // Text that shows the code on screen
     [SerializeField] GameObject profile; // Prefab for player profiles on the starting screen
     [SerializeField] GameObject playButton; // Button to play the game
+    [SerializeField] TMP_InputField linkInput; // The link the player enters
     [SerializeField] List<Color> colours; // The colours that players can have/be
 
     [HideInInspector] public static List<Player> players = new List<Player>(); // List of all players who are currently playing
     [HideInInspector] public static string roomCode = ""; // The code to connect with the host
+    [HideInInspector] public string url;
+
+    private bool tabIsOpened = false;
 
     void Awake() {
         AirConsole.instance.onReady += OnReady; // Gets called when the first device connects
@@ -183,6 +187,13 @@ public class GameLogic : MonoBehaviour {
     }
 
     void Update() {
+        // Opens browser
+        if (Input.GetKeyDown(KeyCode.Return) && !tabIsOpened) {
+            url = linkInput.text;
+            Application.OpenURL("https://www.airconsole.com/simulator/#" + url + "/?unity-editor-websocket-port=7843&unity-plugin-version=2.14");
+            tabIsOpened = true;
+        }
+
         // Player wants to start the game
         if (Input.GetButtonDown("Fire1") && players.Count >= minPlayers) {
             // Switches to wait screen
