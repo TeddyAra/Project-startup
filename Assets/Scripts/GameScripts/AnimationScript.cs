@@ -15,7 +15,7 @@ public class AnimationScript : MonoBehaviour {
     }
 
     public void ChangeAnimationState(string newState) {
-        Debug.Log(newState + " " + (newState == currentState));
+        //Debug.Log(newState + " " + (newState == currentState));
 
         if (newState == currentState) {
             return;

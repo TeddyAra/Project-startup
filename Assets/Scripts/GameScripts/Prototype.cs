@@ -58,6 +58,17 @@ public class Prototype : MonoBehaviour {
     [HideInInspector] public bool standingOnWrongButton;
     private Vector3 checkpoint;
     private AnimationScript animator;
+    public AudioSource audioSource; 
+    public AudioClip step1; 
+    public AudioClip step2; 
+    public AudioClip step3; 
+    public AudioClip step4; 
+    private float stepTimer;
+    [SerializeField] float stepTime; 
+    public AudioClip jump; 
+    public AudioClip jumpLand; 
+    public AudioClip fireBall; 
+    public AudioClip waterFall; 
 
     void Awake() {
         if (usingAirConsole) AirConsole.instance.onMessage += OnMessage;
@@ -74,6 +85,7 @@ public class Prototype : MonoBehaviour {
                 //Debug.Log("Spam clicked");
                 spamClicks[id]++;
                 if (spamClicks[id] >= clickNumToShoot) {
+                    audioSource.PlayOneShot(fireBall); 
                     spamClicks[id] = 0;
                     //Debug.Log("Fireball!");
                     
@@ -181,6 +193,7 @@ public class Prototype : MonoBehaviour {
         if (Input.GetButtonDown("Fire1") && isGrounded && !isDead) {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             animator.ChangeAnimationState(animator.jump);
+            audioSource.PlayOneShot(jump); 
         }
 
         velocity.y += gravity * Time.deltaTime;
@@ -212,6 +225,30 @@ public class Prototype : MonoBehaviour {
         // Rotates player to move direction
         if (move.magnitude > 0) {
             playerModel.transform.LookAt(transform.position + move);
+            int stepType = UnityEngine.Random.Range(0, 3);
+
+            stepTimer += Time.deltaTime; 
+
+            if (stepTimer > stepTime && isGrounded)
+            {
+                stepTimer = 0;
+                switch (stepType) {
+                  case 0:
+                    audioSource.PlayOneShot(step1); 
+                    break;
+                  case 1:
+                    audioSource.PlayOneShot(step2);
+                    break;
+                  case 2:
+                    audioSource.PlayOneShot(step3);
+                    break;
+                  case 3:
+                    audioSource.PlayOneShot(step4);
+                    break;
+                }
+            }
+        
+
         }
 
         // Checks if player is on a falling tile
@@ -233,7 +270,8 @@ public class Prototype : MonoBehaviour {
 
             if (hit.transform.CompareTag(fallTileTag)) {
                 fallPosition = hit.transform.position;
-                hit.transform.gameObject.AddComponent<Rigidbody>();
+                Rigidbody rb = hit.transform.gameObject.AddComponent<Rigidbody>();
+                rb.excludeLayers = groundMask; 
                 hit.transform.gameObject.layer = defaultMask;
                 isDead = true;
             }
@@ -246,13 +284,21 @@ public class Prototype : MonoBehaviour {
 
         // Host died
         if (other.transform.CompareTag(deathTag)) {
+            audioSource.PlayOneShot(waterFall);
             message = JToken.Parse(@"{'type':'change','screen':'wait-screen'}");
             SendBroadcast(message, true);
 
             message = JToken.Parse(@"{'type':'message','screen':'all'}");
             SendBroadcast(message, true);
 
-            SceneManager.LoadScene("Prototype"); 
+            //SceneManager.LoadScene("Prototype"); 
+
+            KnockBack(); 
+            fallPosition = Vector3.zero; 
+            fallVelocity = Vector3.zero;    
+            isDead = false; 
+
+            velocity = Vector3.zero; 
             
         // For prototype, reset the scene. For final version, put a death screen here
         // Players won minigame

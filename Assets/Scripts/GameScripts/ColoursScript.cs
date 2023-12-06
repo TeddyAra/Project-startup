@@ -17,7 +17,10 @@ public class ColoursScript : MonoBehaviour {
     private int currentButton = 0; // The button that should currently be pressed
     private bool movingButton = false; // If there is a moving button or not
     private GameObject pressedButton; // Stores the pressed button for if the player steps off before the animation finishes
-    
+    public AudioSource audioSource; 
+    public AudioClip pressureDown; 
+
+
     void Start() {
         pressed = new Dictionary<GameObject, bool>();
 
@@ -52,9 +55,11 @@ public class ColoursScript : MonoBehaviour {
 
         // Slowly moves button down
         if (negative) {
-            while (button.transform.position.y > -0.5f) { 
+            while (button.transform.position.y > -0.2f) { 
                 button.transform.Translate(0, -Time.deltaTime, 0);
                 yield return null;
+                audioSource.PlayOneShot(pressureDown); 
+
             }
         // Slowly moves button up
         } else {
@@ -66,7 +71,7 @@ public class ColoursScript : MonoBehaviour {
 
         // Puts button at the right position
         Vector3 position = button.transform.position;
-        position.y = negative ? -0.5f : 0;
+        position.y = negative ? -0.2f : 0;
         button.transform.position = position;
 
         // Checks if the buttons have been pressed in the right order

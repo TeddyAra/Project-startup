@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 7673679540718865764}
   - component: {fileID: 1054170055711311843}
   - component: {fileID: 1042247427946852868}
-  - component: {fileID: 2310842818527276424}
   - component: {fileID: 6918338311946479644}
+  - component: {fileID: 8416205792565733902}
   m_Layer: 8
   m_Name: Branch
   m_TagString: Death
@@ -85,28 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2310842818527276424
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6633598194392091361}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 3530945768078225325, guid: 6685fc4786e7d0546b12423b1f280e22, type: 3}
 --- !u!54 &6918338311946479644
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -134,3 +112,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!136 &8416205792565733902
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6633598194392091361}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5768973
+  m_Height: 3.8038821
+  m_Direction: 0
+  m_Center: {x: 0.4543531, y: 0.018841624, z: 0.06592935}
