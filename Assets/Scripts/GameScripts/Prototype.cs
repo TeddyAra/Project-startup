@@ -150,15 +150,10 @@ public class Prototype : MonoBehaviour {
     }
 
     void Update() {
-
-        if (!animator.isAnimationPlaying(animator.jump)) {
-            if (move.magnitude > 0) {
-                animator.ChangeAnimationState(true);
-                Debug.Log("Walking");
-            } else {
-                animator.ChangeAnimationState(false);
-                Debug.Log("Not walking");
-            }
+        if (move.magnitude > 0) {
+            animator.ChangeAnimationState(true);
+        } else {
+            animator.ChangeAnimationState(false);
         }
 
         // Continues timer for each fireball
