@@ -10,19 +10,29 @@ public class AnimationScript : MonoBehaviour {
     public string jump = "jump";
     public string walk = "walking";
 
+    bool previousBool = false;
+    bool isJumping = false;
+
     void Start() {
-        ChangeAnimationState(jump);
+
     }
 
-    public void ChangeAnimationState(string newState) {
-        //Debug.Log(newState + " " + (newState == currentState));
-
-        if (newState == currentState) {
-            return;
+    void Update() {
+        if (previousBool != isJumping && isJumping) {
+            isJumping = false;
+            animator.SetBool("isJumping", false);
         }
 
-        animator.Play(newState);
-        currentState = newState;
+        previousBool = isJumping;
+    }
+
+    public void AnimateJump() {
+        animator.SetBool("isJumping", true);
+        isJumping = true;
+    }
+
+    public void ChangeAnimationState(bool isWalking) {
+        animator.SetBool("isWalking", isWalking);
     }
 
     public bool isAnimationPlaying(string stateName) {

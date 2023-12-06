@@ -150,11 +150,12 @@ public class Prototype : MonoBehaviour {
     }
 
     void Update() {
+
         if (!animator.isAnimationPlaying(animator.jump)) {
             if (move.magnitude > 0)
-                animator.ChangeAnimationState(animator.walk);
+                animator.ChangeAnimationState(true);
             else 
-                animator.ChangeAnimationState(animator.idle);
+                animator.ChangeAnimationState(false);
         }
 
         // Continues timer for each fireball
@@ -192,7 +193,7 @@ public class Prototype : MonoBehaviour {
 
         if (Input.GetButtonDown("Fire1") && isGrounded && !isDead) {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            animator.ChangeAnimationState(animator.jump);
+            animator.AnimateJump(); 
             audioSource.PlayOneShot(jump); 
         }
 
