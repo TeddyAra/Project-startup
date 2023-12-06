@@ -9,6 +9,7 @@ public class ColoursScript : MonoBehaviour {
     [SerializeField] Transform gateL; // The left gate in the scene
     [SerializeField] Transform gateR; // The right gate in the scene
     [SerializeField] GameObject player; // The player
+    [SerializeField] private float rotationSpeed; 
 
     [HideInInspector] public Dictionary<GameObject, bool> pressed; // Each bool represents if a button has been pressed or not
     private Prototype prototypeScript; // Script inside of the player
@@ -85,22 +86,25 @@ public class ColoursScript : MonoBehaviour {
 
     // Move the door up
     IEnumerator MoveGate() {
+
+        float timer = 0f; 
         // Move the gate
-        while (gateL.rotation.y > -120) {
-            gateL.transform.Rotate(0, -Time.deltaTime, 0);
-            gateR.transform.Rotate(0, Time.deltaTime, 0);
+        while (timer < 6f) {
+            timer += Time.deltaTime;
+            gateL.transform.Rotate(0, -Time.deltaTime * rotationSpeed, 0);
+            gateR.transform.Rotate(0, Time.deltaTime * rotationSpeed, 0);
             yield return null;
         }
 
-        // Put the left gate at the right place
-        Vector3 rotation = gateL.eulerAngles;
-        rotation.y = -120;
-        gateL.eulerAngles = rotation;
+        //// Put the left gate at the right place
+        //Vector3 rotation = gateL.eulerAngles;
+        //rotation.y = -120;
+        //gateL.eulerAngles = rotation;
 
-        // Put the right gate at the right place
-        rotation = gateR.eulerAngles;
-        rotation.y = 120;
-        gateL.eulerAngles = rotation;
+        //// Put the right gate at the right place
+        //rotation = gateR.eulerAngles;
+        //rotation.y = 120;
+        //gateL.eulerAngles = rotation;
     }
 
     void CheckButtonStates() {
