@@ -6,10 +6,9 @@ using UnityEngine.UI;
 
 public class ColoursScript : MonoBehaviour {
     [SerializeField] List<GameObject> buttons; // The buttons in the scene
-    [SerializeField] Transform door; // The door in the scene
+    [SerializeField] Transform gateL; // The left gate in the scene
+    [SerializeField] Transform gateR; // The right gate in the scene
     [SerializeField] GameObject player; // The player
-    [SerializeField] Light indicator; // The light that tells the player if they did it right or not
-    [SerializeField] Color correctColor;
 
     [HideInInspector] public Dictionary<GameObject, bool> pressed; // Each bool represents if a button has been pressed or not
     private Prototype prototypeScript; // Script inside of the player
@@ -85,20 +84,23 @@ public class ColoursScript : MonoBehaviour {
     }
 
     // Move the door up
-    IEnumerator MoveDoor() {
-        // Change the light's color
-        indicator.color = correctColor;
-
-        // Move the door
-        while (door.position.y < 8.5f) {
-            door.transform.Translate(0, Time.deltaTime, 0);
+    IEnumerator MoveGate() {
+        // Move the gate
+        while (gateL.rotation.y > -120) {
+            gateL.transform.Rotate(0, -Time.deltaTime, 0);
+            gateR.transform.Rotate(0, Time.deltaTime, 0);
             yield return null;
         }
 
-        // Put the door at the right place
-        Vector3 position = door.position;
-        position.y = 8.5f;
-        door.position = position;
+        // Put the left gate at the right place
+        Vector3 rotation = gateL.eulerAngles;
+        rotation.y = -120;
+        gateL.eulerAngles = rotation;
+
+        // Put the right gate at the right place
+        rotation = gateR.eulerAngles;
+        rotation.y = 120;
+        gateL.eulerAngles = rotation;
     }
 
     void CheckButtonStates() {
@@ -126,6 +128,6 @@ public class ColoursScript : MonoBehaviour {
             }
         }
 
-        StartCoroutine(MoveDoor());
+        StartCoroutine(MoveGate());
     }
 }

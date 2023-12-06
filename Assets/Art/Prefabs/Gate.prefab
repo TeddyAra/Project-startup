@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1471811190764892629}
   - component: {fileID: 86631091248559323}
   - component: {fileID: 5738659144413704942}
+  - component: {fileID: 7853041516893712550}
   m_Layer: 0
   m_Name: Gate.right
   m_TagString: Untagged
@@ -27,11 +28,11 @@ Transform:
   m_GameObject: {fileID: 147585703990600458}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.015360714, z: -0, w: 0.99988204}
-  m_LocalPosition: {x: 4.450772, y: -0.91903114, z: -4.212519}
+  m_LocalPosition: {x: -0.04922819, y: -0.91903114, z: 0.28748083}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2837465843590780119}
+  m_Father: {fileID: 869755639371274163}
   m_LocalEulerAnglesHint: {x: 0, y: 1.76, z: 0}
 --- !u!33 &86631091248559323
 MeshFilter:
@@ -83,6 +84,56 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7853041516893712550
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 147585703990600458}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd5e9f23cdf43040bb536d2edc0fb15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttons: []
+  gateL: {fileID: 635104234086059610}
+  gateR: {fileID: 869755639371274163}
+  player: {fileID: 0}
+  audioSource: {fileID: 0}
+  pressureDown: {fileID: 0}
+--- !u!1 &1792333167564810462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 869755639371274163}
+  m_Layer: 0
+  m_Name: Gate.right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &869755639371274163
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1792333167564810462}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.5, y: 0, z: -4.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1471811190764892629}
+  m_Father: {fileID: 2837465843590780119}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2085025850120090176
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +143,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2837465843590780119}
+  - component: {fileID: 511840079597016957}
   m_Layer: 0
   m_Name: Gate
   m_TagString: Untagged
@@ -112,12 +164,30 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1622015345375792823}
-  - {fileID: 1471811190764892629}
+  - {fileID: 635104234086059610}
+  - {fileID: 869755639371274163}
   - {fileID: 4612535668563855916}
   - {fileID: 4995304942760453018}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &511840079597016957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2085025850120090176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fd5e9f23cdf43040bb536d2edc0fb15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttons: []
+  gateL: {fileID: 0}
+  gateR: {fileID: 0}
+  player: {fileID: 0}
+  audioSource: {fileID: 0}
+  pressureDown: {fileID: 0}
 --- !u!1 &5966031688393901464
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,11 +298,11 @@ Transform:
   m_GameObject: {fileID: 5980671862397586802}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 4.512832, y: -0.91903114, z: 4.9172893}
+  m_LocalPosition: {x: 0.012832165, y: -0.91903114, z: -0.08271074}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2837465843590780119}
+  m_Father: {fileID: 635104234086059610}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5719609627236133989
 MeshFilter:
@@ -284,6 +354,38 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &6218968977691127919
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 635104234086059610}
+  m_Layer: 0
+  m_Name: Gate.left
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &635104234086059610
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6218968977691127919}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.5, y: 0, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1622015345375792823}
+  m_Father: {fileID: 2837465843590780119}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8400287823903672546
 GameObject:
   m_ObjectHideFlags: 0
