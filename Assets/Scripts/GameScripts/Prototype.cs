@@ -41,6 +41,7 @@ public class Prototype : MonoBehaviour {
     [SerializeField] private string checkpointTag = "Checkpoint";
     [SerializeField] private float fireballLifeTime = 5;
     [SerializeField] private bool camIgnoreX = true;
+    [SerializeField] private float camRotSpeed = 15;
 
     // Variables
     private Vector3 velocity;
@@ -69,6 +70,7 @@ public class Prototype : MonoBehaviour {
     public AudioClip jumpLand; 
     public AudioClip fireBall; 
     public AudioClip waterFall;
+    private bool isFinished;
 
     void Awake() {
         if (usingAirConsole) AirConsole.instance.onMessage += OnMessage;
@@ -150,6 +152,27 @@ public class Prototype : MonoBehaviour {
     }
 
     void Update() {
+        // Resets the scene
+        if (Input.GetKeyDown(KeyCode.R)) {
+            // Sends players back to start screen
+            JToken message = JToken.Parse(@"{'type':'change','screen':'start-screen'}");
+            SendBroadcast(message, true);
+
+            // Hides all messages
+            message = JToken.Parse(@"{'type':'message','screen':'all'}");
+            SendBroadcast(message, true);
+
+            // Clears player list and loads new scene
+            GameLogic.players.Clear();
+            SceneManager.LoadScene("Alex Scene");
+        }
+
+        // Animates dance
+        if (isFinished) {
+            animator.Dance();
+            return;
+        }
+
         prevIsGrounded = isGrounded;
         if (move.magnitude > 0) {
             animator.ChangeAnimationState(true);
@@ -166,21 +189,6 @@ public class Prototype : MonoBehaviour {
                 Destroy(currentFireball);
                 fireballs.Remove(currentFireball);
             }
-        }
-
-        // Resets the scene
-        if (Input.GetKeyDown(KeyCode.R)) {
-            // Sends players back to start screen
-            JToken message = JToken.Parse(@"{'type':'change','screen':'start-screen'}");
-            SendBroadcast(message, true);
-
-            // Hides all messages
-            message = JToken.Parse(@"{'type':'message','screen':'all'}");
-            SendBroadcast(message, true);
-
-            // Clears player list and loads new scene
-            GameLogic.players.Clear();
-            SceneManager.LoadScene("Alex Scene");
         }
 
         // Calculates gravity and jump force
@@ -314,6 +322,14 @@ public class Prototype : MonoBehaviour {
             SendBroadcast(message, true);
 
             colourMinigame = false;
+
+            // Finish line
+            if (other.GetComponent<Variation>().variation == 1) {
+                isFinished = true;
+                StartCoroutine(MoveCamera());
+                cam.GetComponent<CameraScript>().canMove = true;
+                GetComponent<BranchesScript>().disabled = true;
+            }
 
             Debug.Log("Minigame won");
         // Players play wall minigame
@@ -481,6 +497,30 @@ public class Prototype : MonoBehaviour {
     void OnDestroy() {
         if (AirConsole.instance != null) {
             if (usingAirConsole) AirConsole.instance.onMessage -= OnMessage;
+        }
+    }
+
+    IEnumerator MoveCamera() {
+        while (cam.position.y > 2.5f) {
+            Vector3 camPosition = cam.position;
+            camPosition.y = 0;
+            Vector3 playerPosition = transform.position;
+            playerPosition.y = 0;
+
+            Vector3 change = (transform.position + Vector3.up * 2 - cam.position).normalized * Time.deltaTime;
+            if ((camPosition - playerPosition).magnitude < 1.5f) {
+                change.x = 0;
+                change.z = 0;
+            }
+
+            cam.position += change;
+            cam.RotateAround(transform.position, Vector3.up, Time.deltaTime * camRotSpeed);
+            yield return null;
+        }
+
+        while (true) {
+            cam.RotateAround(transform.position, Vector3.up, Time.deltaTime * camRotSpeed);
+            yield return null;
         }
     }
 }

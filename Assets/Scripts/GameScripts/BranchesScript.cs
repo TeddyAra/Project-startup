@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BranchesScript : MonoBehaviour {
     [SerializeField] GameObject branch; // Branch prefab
+    [SerializeField] GameObject particle; // Particle prefab
     [SerializeField] float spawnTime; // After how much time should a branch be spawned
     [SerializeField] float spawnSpeedUp; // With how much should the timer decrease every time a branch spawns
     [SerializeField] float minimumTime; // The absolute minimum time it should take for a branch to spawn
@@ -16,12 +17,14 @@ public class BranchesScript : MonoBehaviour {
 
     private float timer; // The timer that keeps track of when to spawn a branch
     private List<GameObject> branches; // All branches
-    private bool firstHit; 
+    [HideInInspector] public bool disabled = false; // If branches should spawn or not
+
     void Start() {
         branches = new List<GameObject>();
     }
 
     void Update() {
+        if (disabled) return;
 
         // Adds time to timer and branch lifetime
         timer += Time.deltaTime;
@@ -42,9 +45,14 @@ public class BranchesScript : MonoBehaviour {
             position.x += Random.Range(-spawnRange, spawnRange);
             position.z += Random.Range(-spawnRange, spawnRange) + spawnDistance;
 
-            // Create the branch and add it to the dictionary
+            // Create the branch and add it to the list
             GameObject newBranch = Instantiate(branch, position, Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
             branches.Add(newBranch);
+
+            // Create the particle
+            position.y = 0;
+            GameObject newParticle = Instantiate(particle, position, Quaternion.identity);
+            newBranch.GetComponent<branchHit>().particle = newParticle;
 
             // Check which branches can be removed
             foreach (GameObject item in branches.ToList()) {

@@ -15,4 +15,8 @@ public class AnimationScript : MonoBehaviour {
     public void ChangeAnimationState(bool isWalking) {
         animator.SetBool("isWalking", isWalking);
     }
+
+    public void Dance() {
+        animator.SetBool("isDancing", true);
+    }
 }

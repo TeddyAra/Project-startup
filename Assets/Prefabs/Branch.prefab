@@ -246,3 +246,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 7540213247004227818}
+  ground:
+    serializedVersion: 2
+    m_Bits: 256
+  particle: {fileID: 0}
