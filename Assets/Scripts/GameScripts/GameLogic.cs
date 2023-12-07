@@ -195,7 +195,7 @@ public class GameLogic : MonoBehaviour {
         // Opens browser
         if (Input.GetKeyDown(KeyCode.Return) && !tabIsOpened) {
             url = linkInput.text;
-            if (url == "") return;
+            if (string.IsNullOrEmpty(url)) return;
             Application.OpenURL("https://www.airconsole.com/simulator/#" + url + "/?unity-editor-websocket-port=7843&unity-plugin-version=2.14");
             tabIsOpened = true;
             linkInput.gameObject.SetActive(false);
