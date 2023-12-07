@@ -17,7 +17,9 @@ public class GameLogic : MonoBehaviour {
     [SerializeField] GameObject profile; // Prefab for player profiles on the starting screen
     [SerializeField] GameObject playButton; // Button to play the game
     [SerializeField] TMP_InputField linkInput; // The link the player enters
+    [SerializeField] GameObject linkText; // The text above the link input
     [SerializeField] List<Color> colours; // The colours that players can have/be
+    [SerializeField] Transform cam; // The camera
 
     [HideInInspector] public static List<Player> players = new List<Player>(); // List of all players who are currently playing
     [HideInInspector] public static string roomCode = ""; // The code to connect with the host
@@ -187,11 +189,17 @@ public class GameLogic : MonoBehaviour {
     }
 
     void Update() {
+        // Rotates the camera
+        cam.RotateAround(Vector3.zero, Vector3.up, Time.deltaTime * 15);
+
         // Opens browser
         if (Input.GetKeyDown(KeyCode.Return) && !tabIsOpened) {
             url = linkInput.text;
+            if (url == "") return;
             Application.OpenURL("https://www.airconsole.com/simulator/#" + url + "/?unity-editor-websocket-port=7843&unity-plugin-version=2.14");
             tabIsOpened = true;
+            linkInput.gameObject.SetActive(false);
+            linkText.SetActive(false);
         }
 
         // Player wants to start the game
