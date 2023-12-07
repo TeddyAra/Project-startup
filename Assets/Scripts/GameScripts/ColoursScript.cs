@@ -19,7 +19,7 @@ public class ColoursScript : MonoBehaviour {
     private GameObject pressedButton; // Stores the pressed button for if the player steps off before the animation finishes
     public AudioSource audioSource; 
     public AudioClip pressureDown; 
-
+    public AudioClip gateOpen; 
 
     void Start() {
         pressed = new Dictionary<GameObject, bool>();
@@ -135,5 +135,6 @@ public class ColoursScript : MonoBehaviour {
         }
 
         StartCoroutine(MoveGate());
+        audioSource.PlayOneShot(gateOpen); 
     }
 }
