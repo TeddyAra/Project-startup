@@ -56323,7 +56323,7 @@ PrefabInstance:
     - target: {fileID: 2315455231940348227, guid: 3613700b84d87d6498d567a6bb9420b7,
         type: 3}
       propertyPath: usingAirConsole
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2649373461123913716, guid: 3613700b84d87d6498d567a6bb9420b7,
         type: 3}
@@ -56338,7 +56338,7 @@ PrefabInstance:
     - target: {fileID: 2649373461123913716, guid: 3613700b84d87d6498d567a6bb9420b7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -71.54
+      value: 38.1
       objectReference: {fileID: 0}
     - target: {fileID: 2649373461123913716, guid: 3613700b84d87d6498d567a6bb9420b7,
         type: 3}
