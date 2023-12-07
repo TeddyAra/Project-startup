@@ -36,10 +36,11 @@ public class ColoursScript : MonoBehaviour {
         if (prototypeScript.colourMinigame) {
             possibleButton = prototypeScript.possibleButton;
 
-            if (movingButton) Debug.Log(movingButton);
-
             // Player is standing on a button
             if (possibleButton != null && !movingButton) {
+                // Button isn't in dictionary
+                if (!pressed.ContainsKey(possibleButton)) return;
+
                 // If button hasn't already been pressed
                 if (!pressed[possibleButton]) {
                     // Move button down and set pressed to true

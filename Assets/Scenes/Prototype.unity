@@ -14242,11 +14242,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 7584291422138584193}
-    - target: {fileID: 6870167315875736867, guid: 01fe54fe359649942b322d1edeb76657,
-        type: 3}
-      propertyPath: gateOpen
-      value: 
-      objectReference: {fileID: 8300000, guid: 44ead19ec614ba14f9d8cdde41db4a64, type: 3}
     m_RemovedComponents:
     - {fileID: 3798307680312724216, guid: 01fe54fe359649942b322d1edeb76657, type: 3}
     m_RemovedGameObjects: []
@@ -40295,11 +40290,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 7584291422138584193}
-    - target: {fileID: 6870167315875736867, guid: 01fe54fe359649942b322d1edeb76657,
-        type: 3}
-      propertyPath: gateOpen
-      value: 
-      objectReference: {fileID: 8300000, guid: 44ead19ec614ba14f9d8cdde41db4a64, type: 3}
     - target: {fileID: 8947772340366608019, guid: 01fe54fe359649942b322d1edeb76657,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -56333,7 +56323,7 @@ PrefabInstance:
     - target: {fileID: 2315455231940348227, guid: 3613700b84d87d6498d567a6bb9420b7,
         type: 3}
       propertyPath: usingAirConsole
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2649373461123913716, guid: 3613700b84d87d6498d567a6bb9420b7,
         type: 3}
@@ -56348,7 +56338,7 @@ PrefabInstance:
     - target: {fileID: 2649373461123913716, guid: 3613700b84d87d6498d567a6bb9420b7,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 51
+      value: -73.31
       objectReference: {fileID: 0}
     - target: {fileID: 2649373461123913716, guid: 3613700b84d87d6498d567a6bb9420b7,
         type: 3}
@@ -56398,18 +56388,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4179897978479234957, guid: 3613700b84d87d6498d567a6bb9420b7,
         type: 3}
-      propertyPath: spawnTime
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4179897978479234957, guid: 3613700b84d87d6498d567a6bb9420b7,
-        type: 3}
       propertyPath: minimumTime
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4179897978479234957, guid: 3613700b84d87d6498d567a6bb9420b7,
         type: 3}
       propertyPath: spawnSpeedUp
-      value: 0.03
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 5795509537480416908, guid: 3613700b84d87d6498d567a6bb9420b7,
         type: 3}
